@@ -3,12 +3,16 @@ package com.racetalk.dao.impl;
 import com.racetalk.dao.RaceDao;
 import com.racetalk.entity.Race;
 import com.racetalk.util.DatabaseConnectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RaceDaoImpl implements RaceDao {
+    private static final Logger log = LoggerFactory.getLogger(RaceDaoImpl.class);
     private final Connection connection = DatabaseConnectionUtil.getConnection();
 
     @Override
@@ -74,7 +78,30 @@ public class RaceDaoImpl implements RaceDao {
             }
             return races;
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Race> findBySessionKey(int sessionKey) {
+        String sql = "SELECT * FROM race WHERE session_key = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sessionKey);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Race race = new Race();
+                race.setId(rs.getInt("id"));
+                race.setSessionKey(rs.getInt("session_key"));
+                race.setName(rs.getString("name"));
+                race.setLocation(rs.getString("location"));
+                race.setRaceDate(rs.getDate("race_date").toLocalDate());
+                race.setFinished(rs.getBoolean("finished"));
+                return Optional.of(race);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
