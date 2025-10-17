@@ -5,6 +5,7 @@ import com.racetalk.entity.Race;
 import com.racetalk.service.RaceService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RaceServiceImpl implements RaceService {
     private final RaceDao raceDao;
@@ -16,5 +17,15 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public List<Race> getUpcomingRaces() {
         return raceDao.findUpcomingRaces();
+    }
+
+    @Override
+    public List<Race> getAll() {
+        return raceDao.findAll();
+    }
+
+    @Override
+    public Optional<Race> getById(int id) {
+        return raceDao.findById(id);
     }
 }

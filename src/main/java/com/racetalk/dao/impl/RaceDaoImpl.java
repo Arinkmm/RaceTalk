@@ -2,6 +2,7 @@ package com.racetalk.dao.impl;
 
 import com.racetalk.dao.RaceDao;
 import com.racetalk.entity.Race;
+import com.racetalk.entity.Team;
 import com.racetalk.util.DatabaseConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,30 @@ public class RaceDaoImpl implements RaceDao {
             while (rs.next()) {
                 Race race = new Race();
                 race.setId(rs.getInt("id"));
-                race.setId(rs.getInt("session_key"));
+                race.setSessionKey(rs.getInt("session_key"));
+                race.setName(rs.getString("name"));
+                race.setLocation(rs.getString("location"));
+                race.setRaceDate(rs.getDate("race_date").toLocalDate());
+                race.setFinished(rs.getBoolean("is_finished"));
+                races.add(race);
+            }
+            return races;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Race> findAll() {
+        String sql = "SELECT * FROM races";
+        List<Race> races = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Race race = new Race();
+                race.setId(rs.getInt("id"));
+                race.setSessionKey(rs.getInt("session_key"));
                 race.setName(rs.getString("name"));
                 race.setLocation(rs.getString("location"));
                 race.setRaceDate(rs.getDate("race_date").toLocalDate());
@@ -92,6 +116,29 @@ public class RaceDaoImpl implements RaceDao {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, sessionKey);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Race race = new Race();
+                race.setId(rs.getInt("id"));
+                race.setSessionKey(rs.getInt("session_key"));
+                race.setName(rs.getString("name"));
+                race.setLocation(rs.getString("location"));
+                race.setRaceDate(rs.getDate("race_date").toLocalDate());
+                race.setFinished(rs.getBoolean("finished"));
+                return Optional.of(race);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Race> findById(int id) {
+        String sql = "SELECT * FROM races WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Race race = new Race();

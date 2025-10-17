@@ -14,5 +14,9 @@ public interface RaceDao {
 
     public List<Race> findUpcomingRaces();
 
+    public List<Race> findAll();
+
     Optional<Race> findBySessionKey(int sessionKey);
+
+    Optional<Race> findById(int id);
 }
