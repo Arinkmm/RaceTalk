@@ -14,14 +14,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(User user) {
-        userDao.create(user);
+    public void registerUser(String username, String password) {
+        userDao.create(new User(username, password));
     }
 
     @Override
-    public Optional<User> loginUser(User user) {
-        Optional<User> loginUser = userDao.findByUsername(user.getUsername());
-        return loginUser.filter(u -> u.getPassword().equals(user.getPassword()));
+    public Optional<User> loginUser(String username, String password) {
+        Optional<User> loginUser = userDao.findByUsername(username);
+        return loginUser.filter(u -> u.getPassword().equals(password));
     }
 
     @Override

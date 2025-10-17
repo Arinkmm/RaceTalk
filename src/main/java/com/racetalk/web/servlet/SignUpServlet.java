@@ -1,5 +1,32 @@
 package com.racetalk.web.servlet;
 
-public class SignUpServlet {
+import com.racetalk.dao.impl.UserDaoImpl;
+import com.racetalk.service.UserService;
+import com.racetalk.service.impl.UserServiceImpl;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet(name = "SignUp", urlPatterns = "/sign_up")
+public class SignUpServlet extends HttpServlet {
+    private final UserService userService = new UserServiceImpl(new UserDaoImpl());
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.getRequestDispatcher("templates/sign_up.ftl").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        userService.registerUser(username, password);
+
+        resp.sendRedirect(req.getContextPath() + "/main");
+    }
 }
 
