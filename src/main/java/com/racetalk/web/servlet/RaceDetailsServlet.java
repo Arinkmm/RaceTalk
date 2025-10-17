@@ -1,4 +1,4 @@
 package com.racetalk.web.servlet;
 
-public class NodeServlet {
+public class RaceDetailsServlet {
 }

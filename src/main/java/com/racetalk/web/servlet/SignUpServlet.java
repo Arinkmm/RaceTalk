@@ -1,4 +1,5 @@
 package com.racetalk.web.servlet;
 
-public class RaceResultServlet {
+public class SignUpServlet {
 }
+
