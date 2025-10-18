@@ -1,8 +1,8 @@
 package com.racetalk.dao.impl;
 
-import com.racetalk.dao.MessageDao;
+import com.racetalk.dao.ChatMessageDao;
 import com.racetalk.dao.UserDao;
-import com.racetalk.entity.Message;
+import com.racetalk.entity.ChatMessage;
 import com.racetalk.entity.User;
 import com.racetalk.util.DatabaseConnectionUtil;
 
@@ -10,23 +10,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDaoImpl implements MessageDao {
+public class ChatChatMessageDaoImpl implements ChatMessageDao {
     private final Connection connection = DatabaseConnectionUtil.getConnection();
     private final UserDao userDao = new UserDaoImpl();
 
     @Override
-    public void create(Message message) {
+    public void create(ChatMessage chatMessage) {
         String sql = "INSERT INTO messages (user_id, content, created_at) VALUES (?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            if (message.getUser() != null) {
-                ps.setInt(1, message.getUser().getId());
+            if (chatMessage.getUser() != null) {
+                ps.setInt(1, chatMessage.getUser().getId());
             } else {
                 ps.setNull(1, Types.INTEGER);
             }
 
-            ps.setString(2, message.getContent());
-            ps.setTimestamp(3, Timestamp.valueOf(message.getCreatedAt()));
+            ps.setString(2, chatMessage.getContent());
+            ps.setTimestamp(3, Timestamp.valueOf(chatMessage.getCreatedAt()));
             ps.executeUpdate();
             } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -34,25 +34,25 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> findAll() {
+    public List<ChatMessage> findAll() {
         String sql = "SELECT * FROM messages ORDER BY created_at ASC";
-        List<Message> messages = new ArrayList<>();
+        List<ChatMessage> chatMessages = new ArrayList<>();
         try {
              PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery();
              while (rs.next()) {
-                Message message = new Message();
-                message.setId(rs.getInt("id"));
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setId(rs.getInt("id"));
                 int userId = rs.getInt("user_id");
                 if (!rs.wasNull()) {
                     User user = userDao.findById(userId).orElse(null);
-                    message.setUser(user);
+                    chatMessage.setUser(user);
                 }
-                message.setContent(rs.getString("content"));
-                message.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-                messages.add(message);
+                chatMessage.setContent(rs.getString("content"));
+                chatMessage.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                chatMessages.add(chatMessage);
             }
-            return messages;
+            return chatMessages;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

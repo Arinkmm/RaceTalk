@@ -2,15 +2,15 @@ package com.racetalk.entity;
 
 import java.time.LocalDateTime;
 
-public class Message {
+public class ChatMessage {
     private int id;
     private User user;
     private String content;
     private LocalDateTime createdAt;
 
-    public Message() {}
+    public ChatMessage() {}
 
-    public Message(int id, User user, String content, LocalDateTime createdAt) {
+    public ChatMessage(int id, User user, String content, LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.content = content;
