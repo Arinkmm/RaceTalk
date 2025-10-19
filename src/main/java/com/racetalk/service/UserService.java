@@ -10,4 +10,6 @@ public interface UserService {
     Optional<User> loginUser(String username, String password);
 
     Optional<User> getById(int id);
+
+    boolean isUsernameUnique(String username);
 }
