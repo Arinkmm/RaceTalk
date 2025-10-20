@@ -5,17 +5,15 @@ import java.time.LocalDate;
 public class Race {
     private int id;
     private int sessionKey;
-    private String name;
     private String location;
     private LocalDate raceDate;
     private boolean isFinished;
 
     public Race() {}
 
-    public Race(int id, int sessionKey, String name, String location, LocalDate raceDate, boolean isFinished) {
+    public Race(int id, int sessionKey, String location, LocalDate raceDate, boolean isFinished) {
         this.id = id;
         this.sessionKey = sessionKey;
-        this.name = name;
         this.location = location;
         this.raceDate = raceDate;
         this.isFinished = isFinished;
@@ -26,9 +24,6 @@ public class Race {
 
     public int getSessionKey() { return sessionKey; }
     public void setSessionKey(int sessionKey) { this.sessionKey = sessionKey; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
 
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }

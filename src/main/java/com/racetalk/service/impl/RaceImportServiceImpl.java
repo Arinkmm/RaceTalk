@@ -1,7 +1,5 @@
 package com.racetalk.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.racetalk.dao.RaceDao;
 import com.racetalk.dao.RaceResultDao;
 import com.racetalk.dao.DriverDao;
@@ -53,20 +51,20 @@ public class RaceImportServiceImpl implements RaceImportService {
                     return newRace;
                 });
 
-                race.setName(raceDto.getMeeting_name());
                 race.setLocation(raceDto.getCircuit_short_name());
-                race.setRaceDate(LocalDate.parse(raceDto.getSession_start_utc().split("T")[0]));
+                race.setRaceDate(LocalDate.parse(raceDto.getDate_start().split("T")[0]));
                 race.setFinished(true);
                 saveOrUpdateRace(race);
 
                 String resultsUrl = "https://api.openf1.org/v1/session_result?session_key=" + raceDto.getSession_key();
                 String resultsJson = sendGetRequest(resultsUrl);
+                Thread.sleep(1000);
 
-                RaceResultResponse response = mapper.readValue(resultsJson, RaceResultResponse.class);
-                List<RaceResultDto> results = response.getResults();
+                RaceResultDto[] resultsArray = mapper.readValue(resultsJson, RaceResultDto[].class);
+                List<RaceResultDto> results = Arrays.asList(resultsArray);
 
                 for (RaceResultDto resDto : results) {
-                    Driver driver = driverDao.findById(resDto.getDriver_number()).orElse(null);
+                    Driver driver = driverDao.findByDriverNumber(resDto.getDriver_number()).orElse(null);
 
                     RaceResult result = new RaceResult();
                     result.setRace(race);
@@ -114,14 +112,6 @@ public class RaceImportServiceImpl implements RaceImportService {
             raceResultDao.update(result);
         } else {
             raceResultDao.create(result);
-        }
-    }
-
-    private static class RaceResultResponse {
-        private List<RaceResultDto> results;
-
-        public List<RaceResultDto> getResults() {
-            return results;
         }
     }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface DriverDao {
     void create(Driver driver);
 
-    Optional<Driver> findById(int id);
+    Optional<Driver> findByDriverNumber(int driverNumber);
 
     List<Driver> findAll();
 }

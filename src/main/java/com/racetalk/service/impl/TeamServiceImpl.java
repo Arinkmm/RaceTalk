@@ -23,4 +23,9 @@ public class TeamServiceImpl implements TeamService {
     public Optional<Team> getById(int id) {
         return teamDao.findById(id);
     }
+
+    @Override
+    public void addTeam(Team team) {
+        teamDao.create(team);
+    }
 }

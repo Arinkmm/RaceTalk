@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface DriverService {
     List<Driver> getAllDrivers();
 
-    Optional<Driver> getById(int id);
+    Optional<Driver> getByDriverNumber(int driverNumber);
 }

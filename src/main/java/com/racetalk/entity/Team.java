@@ -15,6 +15,12 @@ public class Team {
         this.foundedYear = foundedYear;
     }
 
+    public Team(String name, String country, int foundedYear) {
+        this.name = name;
+        this.country = country;
+        this.foundedYear = foundedYear;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

@@ -29,7 +29,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, result.getRace().getId());
-            ps.setInt(2, result.getDriver().getId());
+            ps.setInt(2, result.getDriver().getDriverNumber());
             ps.setInt(3, result.getPosition());
             ps.setInt(4, result.getPoints());
             ps.executeUpdate();
@@ -44,7 +44,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, result.getRace().getId());
-            ps.setInt(2, result.getDriver().getId());
+            ps.setInt(2, result.getDriver().getDriverNumber());
             ps.setInt(3, result.getPosition());
             ps.setInt(4, result.getPoints());
             ps.setInt(5, result.getId());
@@ -83,7 +83,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
                         .findFirst()
                         .orElse(null);
 
-                Driver driver = driverDao.findById(rs.getInt("driver_id")).orElse(null);
+                Driver driver = driverDao.findByDriverNumber(rs.getInt("driver_number")).orElse(null);
 
                 result.setRace(race);
                 result.setDriver(driver);

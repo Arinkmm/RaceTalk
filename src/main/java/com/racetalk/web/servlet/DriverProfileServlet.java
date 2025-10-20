@@ -25,25 +25,25 @@ public class DriverProfileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idInput = req.getParameter("id");
-        if (idInput == null || idInput.trim().isEmpty()) {
-            req.setAttribute("errorMessage", "Driver ID is missing");
+        String driverNumberInput = req.getParameter("driverNumber");
+        if (driverNumberInput == null || driverNumberInput.trim().isEmpty()) {
+            req.setAttribute("errorMessage", "Driver number is missing");
             req.setAttribute("errorCode", 400);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
-        int driverId;
+        int driverNumber;
         try {
-            driverId = Integer.parseInt(idInput.trim());
+            driverNumber = Integer.parseInt(driverNumberInput.trim());
         } catch (NumberFormatException e) {
-            req.setAttribute("errorMessage", "Invalid Driver ID format");
+            req.setAttribute("errorMessage", "Invalid Driver number format");
             req.setAttribute("errorCode", 400);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
-        Optional<Driver> driverOptional = driverService.getById(driverId);
+        Optional<Driver> driverOptional = driverService.getByDriverNumber(driverNumber);
         if (driverOptional.isEmpty()) {
             req.setAttribute("errorMessage", "Driver not found");
             req.setAttribute("errorCode", 404);

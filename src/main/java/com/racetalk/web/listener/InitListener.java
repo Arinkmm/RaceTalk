@@ -2,6 +2,8 @@ package com.racetalk.web.listener;
 
 import com.racetalk.dao.*;
 import com.racetalk.dao.impl.*;
+import com.racetalk.entity.Driver;
+import com.racetalk.entity.Team;
 import com.racetalk.service.*;
 import com.racetalk.service.impl.*;
 import com.racetalk.util.DatabaseConnectionUtil;
@@ -10,9 +12,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.time.LocalDate;
 
 @WebListener
 public class InitListener implements ServletContextListener {
+    private DataScheduler dataScheduler;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -27,6 +31,7 @@ public class InitListener implements ServletContextListener {
         RaceResultDao raceResultDao = new RaceResultDaoImpl(databaseConnection, raceDao, driverDao);
 
         ServletContext context = sce.getServletContext();
+
         context.setAttribute("userDao", userDao);
         context.setAttribute("noteDao", noteDao);
         context.setAttribute("teamDao", teamDao);
@@ -50,5 +55,18 @@ public class InitListener implements ServletContextListener {
         context.setAttribute("raceService", raceService);
         context.setAttribute("chatService", chatService);
         context.setAttribute("raceResultService", raceResultService);
+
+        RaceImportService raceImportService = new RaceImportServiceImpl(raceDao, raceResultDao, driverDao);
+        context.setAttribute("raceImportService", raceImportService);
+
+        dataScheduler = new DataScheduler(raceImportService, 2025);
+        dataScheduler.start();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        if (dataScheduler != null) {
+            dataScheduler.stop();
+        }
     }
 }

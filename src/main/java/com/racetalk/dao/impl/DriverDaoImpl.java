@@ -22,18 +22,19 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public void create(Driver driver) {
-        String sql = "INSERT INTO drivers (team_id, first_name, last_name, date_of_birth, country) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO drivers (driver_number, team_id, first_name, last_name, date_of_birth, country) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, driver.getDriverNumber());
             if (driver.getTeam() != null) {
-                ps.setInt(1, driver.getTeam().getId());
+                ps.setInt(2, driver.getTeam().getId());
             } else {
-                ps.setNull(1, Types.INTEGER);
+                ps.setNull(2, Types.INTEGER);
             }
-            ps.setString(2, driver.getFirstName());
-            ps.setString(3, driver.getLastName());
-            ps.setDate(4, Date.valueOf(driver.getDateOfBirth()));
-            ps.setString(5, driver.getCountry());
+            ps.setString(3, driver.getFirstName());
+            ps.setString(4, driver.getLastName());
+            ps.setDate(5, Date.valueOf(driver.getDateOfBirth()));
+            ps.setString(6, driver.getCountry());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -41,11 +42,11 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
-    public Optional<Driver> findById(int id) {
-        String sql = "SELECT * FROM drivers WHERE id = ?";
+    public Optional<Driver> findByDriverNumber(int driverNumber) {
+        String sql = "SELECT * FROM drivers WHERE driver_number = ?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setInt(1, driverNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return Optional.of(createDriverFromResultSet(rs));
@@ -75,7 +76,7 @@ public class DriverDaoImpl implements DriverDao {
     private Driver createDriverFromResultSet(ResultSet rs) {
         Driver driver = new Driver();
         try {
-            driver.setId(rs.getInt("id"));
+            driver.setDriverNumber(rs.getInt("driver_number"));
             int teamId = rs.getInt("team_id");
             if (!rs.wasNull()) {
                 Team team = teamDao.findById(teamId).orElse(null);

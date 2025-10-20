@@ -1,5 +1,8 @@
 package com.racetalk.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RaceResultDto {
     private int driver_number;
     private int position;
