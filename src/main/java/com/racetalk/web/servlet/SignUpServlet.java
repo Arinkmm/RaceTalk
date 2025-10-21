@@ -1,8 +1,6 @@
 package com.racetalk.web.servlet;
 
-import com.racetalk.dao.impl.UserDaoImpl;
 import com.racetalk.service.UserService;
-import com.racetalk.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

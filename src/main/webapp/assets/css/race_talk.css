@@ -4,9 +4,6 @@ body {
     padding: 0;
     background: #fff;
     color: #111;
-
-    opacity: 0;
-    animation: fadeIn 1s forwards ease-in-out;
 }
 .navbar {
     background: #c1121f;
@@ -147,11 +144,5 @@ footer {
     .btn-main {
         font-size: 1.3rem;
         padding: 1rem 3rem;
-    }
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
     }
 }

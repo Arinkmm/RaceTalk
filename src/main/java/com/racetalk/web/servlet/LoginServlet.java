@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String usernameInput = req.getParameter("username");
         String passwordInput = req.getParameter("password");
 
@@ -41,7 +41,8 @@ public class LoginServlet extends HttpServlet {
 
             resp.sendRedirect(req.getContextPath() + "/main");
         } else {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            req.setAttribute("LoginErrorMessage", "Неверное имя пользователя или пароль");
+            req.getRequestDispatcher("/templates/login.ftl").forward(req, resp);
         }
     }
 }
