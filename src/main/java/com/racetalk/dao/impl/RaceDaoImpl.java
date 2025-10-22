@@ -71,7 +71,7 @@ public class RaceDaoImpl implements RaceDao {
 
     @Override
     public List<Race> findUpcomingRaces() {
-        String sql = "SELECT * FROM upcoming_races";
+        String sql = "SELECT * FROM upcoming_races ORDER BY race_date";
         List<Race> races = new ArrayList<>();
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/RaceTalk_war/assets/css/race_talk.css" rel="stylesheet" />
+    <link href="/RaceTalk_war/assets/css/page-index.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -24,11 +24,11 @@
     </div>
 </nav>
 
-<section class="hero mb-4">
-    <div class="container hero-content">
+<section class="hero d-flex align-items-center">
+    <div class="hero-content">
         <h1 class="hero-title">Добро пожаловать на RaceTalk</h1>
         <p class="hero-desc">Будь ближе к скорости и страсти Формулы 1 — свежая информация, расписание, обсуждение гонок и многое другое для настоящих фанатов</p>
-        <a href="/RaceTalk_war/sign_up" class="btn btn-main">Присоединиться</a>
+        <a href="/RaceTalk_war/sign_up" class="btn btn-main mt-2">Присоединиться</a>
     </div>
 </section>
 
@@ -52,8 +52,6 @@
 <footer>
     &copy; 2025 RaceTalk. Все права защищены.
 </footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

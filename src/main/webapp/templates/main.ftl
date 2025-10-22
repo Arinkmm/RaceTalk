@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>RaceTalk — Главная</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/RaceTalk_war/assets/css/page-main.css" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md sticky-top shadow-sm px-3" aria-label="Главное меню">
+    <a class="navbar-brand" href="/RaceTalk_war/">RaceTalk</a>
+    <div class="collapse navbar-collapse justify-content-end">
+        <div class="navbar-nav">
+            <a class="nav-link text-danger fw-bold" href="/RaceTalk_war/logout">Выйти</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero d-flex justify-content-start align-items-center hero-hello">
+    <div class="hero-content">
+        <h1 class="hero-title">Добро пожаловать, ${user}!</h1>
+        <p class="hero-desc">Следите за предстоящими гонками Формулы 1 и обсуждайте их с сообществом фанатов</p>
+        <a href="/RaceTalk_war/chat" class="btn btn-main mt-2">Перейти в чат</a>
+    </div>
+</section>
+
+<div class="links-section">
+    <a href="/RaceTalk_war/drivers" class="btn btn-link">Гонщики</a>
+    <a href="/RaceTalk_war/teams" class="btn btn-link">Команды</a>
+    <a href="/RaceTalk_war/races" class="btn btn-link">Прошедшие гонки</a>
+    <a href="/RaceTalk_war/notes" class="btn btn-link">Заметки</a>
+</div>
+
+<main class="container my-5">
+    <h2 class="section-title mb-4">Предстоящие гонки</h2>
+
+    <#if races?size == 0>
+        <p class="text-muted">Нет запланированных гонок</p>
+    <#else>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle shadow-sm">
+                <thead class="table-danger">
+                <tr>
+                    <th scope="col">Место проведения</th>
+                    <th scope="col">Дата</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list races as race>
+                    <tr>
+                        <td>${race.location}</td>
+                        <#assign raceDateAsDate = race.raceDate?date("yyyy-MM-dd")>
+                        <td>${raceDateAsDate?string("dd.MM.yyyy")}</td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        </div>
+    </#if>
+</main>
+
+<footer>
+    &copy; 2025 RaceTalk. Все права защищены.
+</footer>
+
+</body>
+</html>
