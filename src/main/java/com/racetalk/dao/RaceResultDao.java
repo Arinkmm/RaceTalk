@@ -11,5 +11,7 @@ public interface RaceResultDao {
 
     boolean existsById(int id);
 
+    List<RaceResult> findResultsByDriverNumber(int driverNumber);
+
     List<RaceResult> findResultsByRaceId(int raceId);
 }

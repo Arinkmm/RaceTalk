@@ -1,7 +1,10 @@
 package com.racetalk.web.servlet;
 
 import com.racetalk.entity.Driver;
+import com.racetalk.entity.RaceResult;
 import com.racetalk.service.DriverService;
+import com.racetalk.service.RaceResultService;
+import com.racetalk.service.RaceService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,33 +12,37 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet(name = "DriverProfile", urlPatterns = "/driver/*")
 public class DriverProfileServlet extends HttpServlet {
     private DriverService driverService;
+    private RaceResultService raceResultService;
 
     @Override
     public void init() {
         driverService = (DriverService) getServletContext().getAttribute("driverService");
-        if (driverService == null) {
-            throw new IllegalStateException("DriverService not initialized");
+        raceResultService = (RaceResultService) getServletContext().getAttribute("raceResultService");
+        if (driverService == null || raceResultService == null) {
+            throw new IllegalStateException("Services are not initialized");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String driverNumberInput = req.getParameter("driverNumber");
-        if (driverNumberInput == null || driverNumberInput.trim().isEmpty()) {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
             req.setAttribute("errorMessage", "Driver number is missing");
             req.setAttribute("errorCode", 400);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
+        String driverNumberStr = pathInfo.substring(1);
         int driverNumber;
         try {
-            driverNumber = Integer.parseInt(driverNumberInput.trim());
+            driverNumber = Integer.parseInt(driverNumberStr);
         } catch (NumberFormatException e) {
             req.setAttribute("errorMessage", "Invalid Driver number format");
             req.setAttribute("errorCode", 400);
@@ -52,8 +59,10 @@ public class DriverProfileServlet extends HttpServlet {
         }
 
         Driver driver = driverOptional.get();
-
         req.setAttribute("driver", driver);
+
+        List<RaceResult> raceResults = raceResultService.getResultsByDriverNumber(driverNumber);
+        req.setAttribute("raceResults", raceResults);
 
         req.getRequestDispatcher("/templates/driver_profile.ftl").forward(req, resp);
     }

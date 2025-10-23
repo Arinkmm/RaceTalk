@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Гонщики сезона — RaceTalk</title>
+    <title>RaceTalk — Гонщики сезона</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="${contextPath}/assets/css/page-drivers.css" rel="stylesheet" />
@@ -16,7 +16,7 @@
 <section>
     <div class="hero-content">
     <h1 class="hero-title">Гонщики сезона</h1>
-    <p class="hero-desc">Для просмотра статистики гонщика - нажмите</p>
+    <p class="hero-desc">Для просмотра статистики гонщика — нажмите</p>
     </div>
 
     <div class="table-wrapper">

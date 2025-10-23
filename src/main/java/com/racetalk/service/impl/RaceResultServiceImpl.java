@@ -14,7 +14,13 @@ public class RaceResultServiceImpl implements RaceResultService {
     }
 
     @Override
+    public List<RaceResult> getResultsByDriverNumber(int driverNumber) {
+        return raceResultDao.findResultsByDriverNumber(driverNumber);
+    }
+
+    @Override
     public List<RaceResult> getResultsByRaceId(int raceId) {
         return raceResultDao.findResultsByRaceId(raceId);
     }
+
 }

@@ -11,6 +11,7 @@ import com.racetalk.util.DatabaseConnectionUtil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RaceResultDaoImpl implements RaceResultDao {
     private final DatabaseConnectionUtil databaseConnection;
@@ -25,7 +26,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
 
     @Override
     public void create(RaceResult result) {
-        String sql = "INSERT INTO race_results (race_id, driver_id, position, points) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO race_results (race_id, driver_number, position, points) VALUES (?, ?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, result.getRace().getId());
@@ -40,7 +41,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
 
     @Override
     public void update(RaceResult result) {
-        String sql = "UPDATE race_results SET race_id=?, driver_id=?, position=?, points=? WHERE id=?";
+        String sql = "UPDATE race_results SET race_id=?, driver_number=?, position=?, points=? WHERE id=?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, result.getRace().getId());
@@ -68,8 +69,45 @@ public class RaceResultDaoImpl implements RaceResultDao {
     }
 
     @Override
+    public List<RaceResult> findResultsByDriverNumber(int driverNumber) {
+        String sql = "SELECT * FROM race_results WHERE driver_number = ?";
+        List<RaceResult> results = new ArrayList<>();
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, driverNumber);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                RaceResult result = new RaceResult();
+                result.setId(rs.getInt("id"));
+
+                Race race = raceDao.findPastRaces().stream()
+                        .filter(r -> {
+                            try {
+                                return r.getId() == rs.getInt("race_id");
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .findFirst()
+                        .orElse(null);
+
+                Driver driver = driverDao.findByDriverNumber(driverNumber).orElse(null);
+
+                result.setRace(race);
+                result.setDriver(driver);
+                result.setPosition(rs.getInt("position"));
+                result.setPoints(rs.getInt("points"));
+                results.add(result);
+            }
+            return results;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<RaceResult> findResultsByRaceId(int raceId) {
-        String sql = "SELECT * FROM race_results WHERE race_id = ? ORDER BY position";
+        String sql = "SELECT * FROM race_results WHERE race_id = ?";
         List<RaceResult> results = new ArrayList<>();
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -78,7 +116,7 @@ public class RaceResultDaoImpl implements RaceResultDao {
             while (rs.next()) {
                 RaceResult result = new RaceResult();
                 result.setId(rs.getInt("id"));
-                Race race = raceDao.findUpcomingRaces().stream()
+                Race race = raceDao.findPastRaces().stream()
                         .filter(r -> r.getId() == raceId)
                         .findFirst()
                         .orElse(null);
@@ -92,8 +130,9 @@ public class RaceResultDaoImpl implements RaceResultDao {
                 results.add(result);
             }
             return results;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
 }
