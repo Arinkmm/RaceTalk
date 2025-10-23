@@ -5,7 +5,7 @@
     <title>RaceTalk — Главная</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/RaceTalk_war/assets/css/page-main.css" rel="stylesheet" />
+    <link href="${contextPath}/assets/css/page-main.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -18,7 +18,7 @@
     </div>
 </nav>
 
-<section class="hero d-flex justify-content-start align-items-center hero-hello">
+<section class="hero d-flex justify-content-start align-items-center">
     <div class="hero-content">
         <h1 class="hero-title">Добро пожаловать, ${user}!</h1>
         <p class="hero-desc">Следите за предстоящими гонками Формулы 1 и обсуждайте их с сообществом фанатов</p>

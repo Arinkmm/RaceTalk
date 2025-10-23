@@ -65,7 +65,7 @@ body {
 section.hero {
     position: relative;
     min-height: 70vh;
-    background: url('${contextPath}/assets/images/background-page-main.jpg') no-repeat center center;
+    background: url('../images/background-page-main.jpg') no-repeat center center;
     background-size: cover;
     background-blend-mode: lighten;
     margin-bottom: 3rem;
@@ -192,11 +192,6 @@ footer {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-}
-
-.hero-hello {
-    background: #f8f8f8 !important;
-    min-height: 70vh !important;
 }
 
 @media(max-width: 600px) {
