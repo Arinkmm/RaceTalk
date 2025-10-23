@@ -22,7 +22,7 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public void create(Driver driver) {
-        String sql = "INSERT INTO drivers (driver_number, team_id, first_name, last_name, date_of_birth, country) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO drivers (driver_number, team_id, first_name, last_name, date_of_birth, country, photoUrl) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, driver.getDriverNumber());
@@ -35,6 +35,7 @@ public class DriverDaoImpl implements DriverDao {
             ps.setString(4, driver.getLastName());
             ps.setDate(5, Date.valueOf(driver.getDateOfBirth()));
             ps.setString(6, driver.getCountry());
+            ps.setString(7, driver.getPhoto());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -59,7 +60,7 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public List<Driver> findAll() {
-        String sql = "SELECT * FROM drivers";
+        String sql = "SELECT * FROM drivers ORDER BY driver_number";
         List<Driver> drivers = new ArrayList<>();
         try (Connection connection = databaseConnection.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -94,6 +95,7 @@ public class DriverDaoImpl implements DriverDao {
             }
 
             driver.setCountry(rs.getString("country"));
+            driver.setPhoto(rs.getString("photo"));
             return driver;
         } catch (SQLException e) {
             throw new RuntimeException(e);

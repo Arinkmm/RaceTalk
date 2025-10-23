@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(name = "DriverProfile", urlPatterns = "/driver/profile")
+@WebServlet(name = "DriverProfile", urlPatterns = "/driver/*")
 public class DriverProfileServlet extends HttpServlet {
     private DriverService driverService;
 

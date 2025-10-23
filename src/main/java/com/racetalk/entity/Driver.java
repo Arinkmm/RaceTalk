@@ -9,24 +9,27 @@ public class Driver {
     private String lastName;
     private LocalDate dateOfBirth;
     private String country;
+    private String photo;
 
     public Driver() {}
 
-    public Driver(int driverNumber, Team team, String firstName, String lastName, LocalDate dateOfBirth, String country) {
+    public Driver(int driverNumber, Team team, String firstName, String lastName, LocalDate dateOfBirth, String country, String photo) {
         this.driverNumber = driverNumber;
         this.team = team;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.country = country;
+        this.photo = photo;
     }
 
-    public Driver(Team team, String firstName, String lastName, LocalDate dateOfBirth, String country) {
+    public Driver(Team team, String firstName, String lastName, LocalDate dateOfBirth, String country, String photo) {
         this.team = team;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.country = country;
+        this.photo = photo;
     }
 
     public int getDriverNumber() { return driverNumber; }
@@ -46,4 +49,11 @@ public class Driver {
 
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
+
+    public String getPhoto() {
+        return photo;
+    }
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }
