@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet(name = "RaceDetails", urlPatterns = "/race/details")
+@WebServlet(name = "RaceDetails", urlPatterns = "/race/*")
 public class RaceDetailsServlet extends HttpServlet {
     private RaceService raceService;
     private RaceResultService raceResultService;
@@ -30,35 +30,36 @@ public class RaceDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idInput = req.getParameter("id");
-        if (idInput == null || idInput.trim().isEmpty()) {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
             req.setAttribute("errorMessage", "ID гонки не найден");
-            req.setAttribute("errorCode", 400);
+            req.setAttribute("statusCode", 400);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
+        String raceIdStr = pathInfo.substring(1);
         int raceId;
         try {
-            raceId = Integer.parseInt(idInput.trim());
+            raceId = Integer.parseInt(raceIdStr);
         } catch (NumberFormatException e) {
             req.setAttribute("errorMessage", "Неверный формат ID гонки");
-            req.setAttribute("errorCode", 400);
+            req.setAttribute("statusCode", 400);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
-        Optional<Race> raceOptional = raceService.getPastRaceById(raceId);
-        if (raceOptional.isEmpty()) {
+        Optional<Race> raceOpt = raceService.getPastRaceById(raceId);
+        if (raceOpt.isEmpty()) {
             req.setAttribute("errorMessage", "Гонка не найдена");
-            req.setAttribute("errorCode", 404);
+            req.setAttribute("statusCode", 404);
             req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
             return;
         }
 
         List<RaceResult> results = raceResultService.getResultsByRaceId(raceId);
 
-        Race race = raceOptional.get();
+        Race race = raceOpt.get();
 
         req.setAttribute("race", race);
         req.setAttribute("results", results);

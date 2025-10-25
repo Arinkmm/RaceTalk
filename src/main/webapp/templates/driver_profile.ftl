@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <title>RaceTalk — Профиль и результаты пилота</title>
+    <title>RaceTalk — Профиль и результаты пилота | ${driver.firstName} ${driver.lastName}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="${contextPath}/assets/css/page-driver_profile.css" rel="stylesheet" />
@@ -20,7 +20,7 @@
 
 <section class="hero d-flex align-items-center justify-content-start">
 
-    <img src="${contextPath}/assets/images/${driver.photo!'background-page-index.jpg'}"
+    <img src="${contextPath}/assets/images/${driver.photo!'driver-default.jpg'}"
          alt="${driver.firstName} ${driver.lastName}" class="driver-photo"/>
 
     <div class="hero-content">
@@ -70,7 +70,7 @@
                             </#if>
                         </td>
 
-                        <td>${r.points!0}</td>
+                        <td>${r.points}</td>
                         <td>
                             <#if r.position == 0>
                                 Не финишировал
