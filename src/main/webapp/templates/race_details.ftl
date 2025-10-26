@@ -13,7 +13,10 @@
     <a class="navbar-brand" href="${contextPath}/">RaceTalk</a>
     <div class="collapse navbar-collapse justify-content-end">
         <div class="navbar-nav">
-            <a class="nav-link text-danger fw-bold" href="${contextPath}/main">На главную</a>
+            <a class="nav-link text-danger fw-bold d-flex align-items-center" href="${contextPath}/races" role="button" aria-label="Назад">
+                &#8592;
+                <span class="ms-2">Назад</span>
+            </a>
         </div>
     </div>
 </nav>

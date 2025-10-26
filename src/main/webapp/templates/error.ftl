@@ -10,13 +10,12 @@
 <body>
 
 <nav class="navbar navbar-expand-md sticky-top shadow-sm px-3" aria-label="Главное меню">
-    <a class="navbar-brand" href="${contextPath}/">RaceTalk</a>
+    <a class="navbar-brand" href="${contextPath}/main">RaceTalk</a>
 </nav>
 
 <main class="container text-center mt-5">
     <h1 class="display-3 text-danger">${statusCode!500}</h1>
     <p class="lead">${errorMessage!'Внутренняя ошибка сервера'}</p>
-    <a href="${contextPath}/" class="btn btn-main mt-3">На главную</a>
 </main>
 
 <footer>

@@ -10,12 +10,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md sticky-top shadow-sm px-3" aria-label="Главное меню">
-    <a class="navbar-brand" href="${contextPath}/">RaceTalk</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <div class="navbar-nav">
-            <a class="nav-link text-danger fw-bold" href="${contextPath}/main">На главную</a>
-        </div>
-    </div>
+    <a class="navbar-brand" href="${contextPath}/main">RaceTalk</a>
 </nav>
 
 
