@@ -42,7 +42,7 @@ public class InitListener implements ServletContextListener {
         TeamService teamService = new TeamServiceImpl(teamDao);
         DriverService driverService = new DriverServiceImpl(driverDao);
         RaceService raceService = new RaceServiceImpl(raceDao);
-        ChatMessageService chatService = new ChatMessageServiceImpl(chatMessageDao);
+        ChatMessageService chatMessageService = new ChatMessageServiceImpl(chatMessageDao);
         RaceResultService raceResultService = new RaceResultServiceImpl(raceResultDao);
 
         context.setAttribute("userService", userService);
@@ -50,7 +50,7 @@ public class InitListener implements ServletContextListener {
         context.setAttribute("teamService", teamService);
         context.setAttribute("driverService", driverService);
         context.setAttribute("raceService", raceService);
-        context.setAttribute("chatService", chatService);
+        context.setAttribute("chatMessageService", chatMessageService);
         context.setAttribute("raceResultService", raceResultService);
 
         RaceImportService raceImportService = new RaceImportServiceImpl(raceDao, raceResultDao, driverDao);

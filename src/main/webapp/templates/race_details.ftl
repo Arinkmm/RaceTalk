@@ -39,7 +39,7 @@
             <table class="table table-hover align-middle shadow-sm">
                 <thead class="table-danger">
                 <tr>
-                    <th scope="col">Гран-при</th>
+                    <th scope="col">Место</th>
                     <th scope="col">Гонщик</th>
                     <th scope="col">Очки</th>
                 </tr>

@@ -46,8 +46,9 @@
                         <h5 class="mb-1">${note.title}</h5>
                         <p class="mb-1">${note.content}</p>
                         <small class="text-muted">Создано:
-                            <#assign createdAtDate = note.createdAt?date("yyyy-MM-dd")>
-                            ${createdAtDate?string("dd.MM.yyyy")}
+                            <#if note.createdAt??>
+                                ${note.createdAt?replace("T", " ")?substring(0,16)}
+                            </#if>
                         </small>
                     </div>
                     <form method="POST" action="${contextPath}/notes">
