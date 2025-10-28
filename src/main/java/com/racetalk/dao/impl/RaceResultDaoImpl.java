@@ -3,9 +3,11 @@ package com.racetalk.dao.impl;
 import com.racetalk.dao.DriverDao;
 import com.racetalk.dao.RaceDao;
 import com.racetalk.dao.RaceResultDao;
+import com.racetalk.dao.TeamDao;
 import com.racetalk.entity.Driver;
 import com.racetalk.entity.Race;
 import com.racetalk.entity.RaceResult;
+import com.racetalk.entity.Team;
 import com.racetalk.util.DatabaseConnectionUtil;
 
 import java.sql.*;
@@ -17,11 +19,13 @@ public class RaceResultDaoImpl implements RaceResultDao {
     private final DatabaseConnectionUtil databaseConnection;
     private final RaceDao raceDao;
     private final DriverDao driverDao;
+    private final TeamDao teamDao;
 
-    public RaceResultDaoImpl(DatabaseConnectionUtil databaseConnection, RaceDao raceDao, DriverDao driverDao) {
+    public RaceResultDaoImpl(DatabaseConnectionUtil databaseConnection, RaceDao raceDao, DriverDao driverDao, TeamDao teamDao) {
         this.databaseConnection = databaseConnection;
         this.raceDao = raceDao;
         this.driverDao = driverDao;
+        this.teamDao = teamDao;
     }
 
     @Override
@@ -145,6 +149,53 @@ public class RaceResultDaoImpl implements RaceResultDao {
             } else {
                 return Optional.empty();
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<RaceResult> findResultsByTeamId(int teamId) {
+        String sql = "SELECT rr.id, rr.position, rr.points, rr.race_id, rr.driver_number, r.location, r.race_date, r.is_finished, d.driver_number, d.first_name, d.last_name, d.date_of_birth, d.country, d.photo  FROM race_results rr JOIN drivers d ON rr.driver_number = d.driver_number JOIN past_races r ON rr.race_id = r.id WHERE d.team_id = ? ORDER BY rr.race_id, rr.position";
+
+        List<RaceResult> results = new ArrayList<>();
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, teamId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                RaceResult raceResult = new RaceResult();
+                raceResult.setId(rs.getInt("id"));
+                raceResult.setPosition(rs.getInt("position"));
+                raceResult.setPoints(rs.getInt("points"));
+
+                Race race = new Race();
+                race.setId(rs.getInt("race_id"));
+                race.setLocation(rs.getString("location"));
+                race.setRaceDate(rs.getDate("race_date").toLocalDate());
+                race.setFinished(rs.getBoolean("is_finished"));
+                raceResult.setRace(race);
+
+                Driver driver = new Driver();
+                driver.setDriverNumber(rs.getInt("driver_number"));
+
+                Team team = teamDao.findById(teamId).orElse(null);
+                driver.setTeam(team);
+
+                driver.setFirstName(rs.getString("first_name"));
+                driver.setLastName(rs.getString("last_name"));
+                driver.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
+                driver.setCountry(rs.getString("country"));
+                if (!rs.wasNull()) {
+                    driver.setPhoto(rs.getString("photo"));
+                } else {
+                    driver.setPhoto(null);
+                }
+                raceResult.setDriver(driver);
+
+                results.add(raceResult);
+            }
+            return results;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -24,11 +24,7 @@ public class ChatMessageDaoImpl implements ChatMessageDao {
         String sql = "INSERT INTO messages (user_id, content, created_at) VALUES (?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            if (chatMessage.getUser() != null) {
-                ps.setInt(1, chatMessage.getUser().getId());
-            } else {
-                ps.setNull(1, Types.INTEGER);
-            }
+            ps.setInt(1, chatMessage.getUser().getId());
 
             ps.setString(2, chatMessage.getContent());
             ps.setTimestamp(3, Timestamp.valueOf(chatMessage.getCreatedAt()));

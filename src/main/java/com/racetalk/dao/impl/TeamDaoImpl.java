@@ -44,7 +44,11 @@ public class TeamDaoImpl implements TeamDao {
                 team.setName(rs.getString("name"));
                 team.setCountry(rs.getString("country"));
                 team.setFoundedYear(rs.getInt("founded_year"));
-                team.setPhoto(rs.getString("photo"));
+                if (!rs.wasNull()) {
+                    team.setPhoto(rs.getString("photo"));
+                } else {
+                    team.setPhoto(null);
+                }
                 return Optional.of(team);
             }
             return Optional.empty();
@@ -66,7 +70,11 @@ public class TeamDaoImpl implements TeamDao {
                 team.setName(rs.getString("name"));
                 team.setCountry(rs.getString("country"));
                 team.setFoundedYear(rs.getInt("founded_year"));
-                team.setPhoto(rs.getString("photo"));
+                if (!rs.wasNull()) {
+                    team.setPhoto(rs.getString("photo"));
+                } else {
+                    team.setPhoto(null);
+                }
                 teams.add(team);
             }
             return teams;

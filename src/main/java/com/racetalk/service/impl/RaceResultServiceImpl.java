@@ -22,4 +22,9 @@ public class RaceResultServiceImpl implements RaceResultService {
     public List<RaceResult> getResultsByRaceId(int raceId) {
         return raceResultDao.findResultsByRaceId(raceId);
     }
+
+    @Override
+    public List<RaceResult> getResultsByTeamId(int teamId) {
+        return raceResultDao.findResultsByTeamId(teamId);
+    }
 }

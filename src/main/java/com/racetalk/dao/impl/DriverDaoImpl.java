@@ -74,28 +74,43 @@ public class DriverDaoImpl implements DriverDao {
         }
     }
 
+    @Override
+    public List<Driver> findDriversByTeamId(int teamId) {
+        String sql = "SELECT * FROM drivers WHERE team_id = ?";
+        List<Driver> drivers = new ArrayList<>();
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, teamId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                drivers.add(createDriverFromResultSet(rs));
+            }
+            return drivers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private Driver createDriverFromResultSet(ResultSet rs) {
         Driver driver = new Driver();
         try {
             driver.setDriverNumber(rs.getInt("driver_number"));
             int teamId = rs.getInt("team_id");
-            if (!rs.wasNull()) {
-                Team team = teamDao.findById(teamId).orElse(null);
-                driver.setTeam(team);
-            } else {
-                driver.setTeam(null);
-            }
+            Team team = teamDao.findById(teamId).orElse(null);
+            driver.setTeam(team);
 
             driver.setFirstName(rs.getString("first_name"));
             driver.setLastName(rs.getString("last_name"));
 
             Date dob = rs.getDate("date_of_birth");
-            if (dob != null) {
-                driver.setDateOfBirth(dob.toLocalDate());
-            }
+            driver.setDateOfBirth(dob.toLocalDate());
 
             driver.setCountry(rs.getString("country"));
-            driver.setPhoto(rs.getString("photo"));
+            if (!rs.wasNull()) {
+                driver.setPhoto(rs.getString("photo"));
+            } else {
+                driver.setPhoto(null);
+            }
             return driver;
         } catch (SQLException e) {
             throw new RuntimeException(e);

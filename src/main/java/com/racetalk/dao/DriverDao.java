@@ -11,4 +11,6 @@ public interface DriverDao {
     Optional<Driver> findByDriverNumber(int driverNumber);
 
     List<Driver> findAll();
+
+    List<Driver> findDriversByTeamId(int teamId);
 }

@@ -23,4 +23,9 @@ public class DriverServiceImpl implements DriverService {
     public Optional<Driver> getByDriverNumber(int driverNumber) {
         return driverDao.findByDriverNumber(driverNumber);
     }
+
+    @Override
+    public List<Driver> getDriversByTeamId(int teamId) {
+        return driverDao.findDriversByTeamId(teamId);
+    }
 }

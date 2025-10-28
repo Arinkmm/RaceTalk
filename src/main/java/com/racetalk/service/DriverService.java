@@ -9,4 +9,6 @@ public interface DriverService {
     List<Driver> getAllDrivers();
 
     Optional<Driver> getByDriverNumber(int driverNumber);
+
+    List<Driver> getDriversByTeamId(int teamId);
 }

@@ -15,4 +15,6 @@ public interface RaceResultDao {
     List<RaceResult> findResultsByRaceId(int raceId);
 
     Optional<RaceResult> findResultsByRaceIdAndDriverNumber(int raceId, int driverNumber);
+
+    List<RaceResult> findResultsByTeamId(int teamId);
 }
