@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/notes/edit")
+@WebServlet(name = "NoteEdit", urlPatterns = "/notes/edit/*")
 public class NoteEditServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(NoteEditServlet.class);
 
@@ -30,13 +30,32 @@ public class NoteEditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
+            req.setAttribute("errorMessage", "ID заметки не найден");
+            req.setAttribute("statusCode", 400);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+        String noteIdStr = pathInfo.substring(1);
+        int noteId;
         try {
-            int noteId = Integer.parseInt(req.getParameter("noteId"));
+            noteId = Integer.parseInt(noteIdStr);
+        } catch (NumberFormatException e) {
+            req.setAttribute("errorMessage", "Неверный формат ID заметки");
+            req.setAttribute("statusCode", 400);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+        try {
             Optional<Note> noteOpt = noteService.getById(noteId);
             if (noteOpt.isEmpty()) {
-                resp.sendRedirect(req.getContextPath() + "/notes");
+                req.setAttribute("errorMessage", "Заметка не найдена");
+                req.setAttribute("statusCode", 404);
+                req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
                 return;
             }
+
             req.setAttribute("note", noteOpt.get());
             req.getRequestDispatcher("/templates/note_edit.ftl").forward(req, resp);
         } catch (ServiceException e) {

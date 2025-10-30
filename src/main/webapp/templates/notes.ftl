@@ -43,11 +43,8 @@
                         </small>
                     </div>
                     <div class="d-flex gap-2">
-                        <form action="${contextPath}/notes/edit" method="GET">
-                            <input type="hidden" name="action" value="edit" />
-                            <input type="hidden" name="noteId" value="${note.id}" />
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Редактировать</button>
-                        </form>
+                        <a href="${contextPath}/notes/edit/${note.id}" class="btn btn-outline-danger btn-sm">Редактировать</a>
+
                         <form method="POST" action="${contextPath}/notes">
                             <input type="hidden" name="action" value="delete" />
                             <input type="hidden" name="noteId" value="${note.id}" />
