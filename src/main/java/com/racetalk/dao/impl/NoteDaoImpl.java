@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NoteDaoImpl implements NoteDao {
     private static final Logger logger = LoggerFactory.getLogger(NoteDaoImpl.class);
@@ -33,6 +34,34 @@ public class NoteDaoImpl implements NoteDao {
             } catch (SQLException e) {
             logger.error("Error creating note for user id {}", note.getUser().getId(), e);
             throw new DataAccessException("Failed to create note", e);
+        }
+    }
+
+    @Override
+    public void update(Note note) {
+        String sql = "UPDATE notes SET title = ?, content = ? WHERE id = ?";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, note.getTitle());
+            ps.setString(2, note.getContent());
+            ps.setInt(3, note.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error updating note for user id {}", note.getUser().getId(), e);
+            throw new DataAccessException("Failed to update note", e);
+        }
+    }
+
+    @Override
+    public void deleteById(int id) {
+        String sql = "DELETE FROM notes WHERE id = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error deleting note id {}", id, e);
+            throw new DataAccessException("Failed to delete note by id", e);
         }
     }
 
@@ -61,15 +90,29 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public void deleteById(int id) {
-        String sql = "DELETE FROM notes WHERE id = ?";
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, id);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error deleting note id {}", id, e);
-            throw new DataAccessException("Failed to delete note by id", e);
+    public Optional<Note> findById(int id) {
+        String sql = "SELECT user_id, title, content, created_at FROM notes WHERE id = ?";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Note note = new Note();
+                note.setId(id);
+                note.setTitle(rs.getString("title"));
+                note.setContent(rs.getString("content"));
+                note.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+                User user = new User();
+                user.setId(rs.getInt("user_id"));
+                note.setUser(user);
+
+                return Optional.of(note);
+                }
+            return Optional.empty();
+            } catch (SQLException e) {
+                logger.error("Error finding note for its id {}", id, e);
+                throw new DataAccessException("Failed to find note by id", e);
         }
     }
 }

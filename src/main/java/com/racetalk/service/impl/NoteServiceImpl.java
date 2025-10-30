@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class NoteServiceImpl implements NoteService {
     private static final Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
@@ -30,12 +31,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getUserNotes(User user) {
+    public void updateNote(Note note) {
         try {
-            return noteDao.findByUser(user);
+            noteDao.update(note);
         } catch (DataAccessException e) {
-            logger.error("Failed to get notes for user {}", user.getId(), e);
-            throw new ServiceException("Failed to get user notes", e);
+            logger.error("Failed to update note for user {}", note.getUser().getId(), e);
+            throw new ServiceException("Failed to update note", e);
         }
     }
 
@@ -46,6 +47,26 @@ public class NoteServiceImpl implements NoteService {
         } catch (DataAccessException e) {
             logger.error("Failed to delete note with id {}", id, e);
             throw new ServiceException("Failed to delete note", e);
+        }
+    }
+
+    @Override
+    public List<Note> getUserNotes(User user) {
+        try {
+            return noteDao.findByUser(user);
+        } catch (DataAccessException e) {
+            logger.error("Failed to get notes for user {}", user.getId(), e);
+            throw new ServiceException("Failed to get user notes", e);
+        }
+    }
+
+    @Override
+    public Optional<Note> getById(int id) {
+        try {
+            return noteDao.findById(id);
+        } catch (DataAccessException e) {
+            logger.error("Failed to get note by id {}", id, e);
+            throw new ServiceException("Failed to get note by id", e);
         }
     }
 }
