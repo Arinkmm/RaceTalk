@@ -21,13 +21,13 @@
         <form id="signup-form" method="post" action="${contextPath}/sign_up" class="p-4 rounded shadow-sm login-form">
             <div class="mb-3">
                 <label class="form-label fw-bold text-danger">Имя пользователя</label>
-                <input type="text" class="form-control" name="username" placeholder="Придумайте имя" required />
+                <input type="text" class="form-control" id="username" name="username" placeholder="Придумайте имя" required />
                 <div id="username-feedback" class="text-danger fw-bold mt-2"></div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-bold text-danger">Пароль</label>
-                <input type="password" class="form-control" name="password" placeholder="Введите пароль" required />
+                <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required />
                 <div id="password-feedback" class="text-danger fw-bold mt-2"></div>
             </div>
 
