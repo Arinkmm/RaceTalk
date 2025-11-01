@@ -1,9 +1,11 @@
 package com.racetalk.web.listener;
 
+import com.cloudinary.Cloudinary;
 import com.racetalk.dao.*;
 import com.racetalk.dao.impl.*;
 import com.racetalk.service.*;
 import com.racetalk.service.impl.*;
+import com.racetalk.util.CloudinaryUtil;
 import com.racetalk.util.DatabaseConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ public class InitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         DatabaseConnectionUtil databaseConnection = DatabaseConnectionUtil.getInstance();
+        Cloudinary cloudinary = CloudinaryUtil.getInstance();
 
         UserDao userDao = new UserDaoImpl(databaseConnection);
         NoteDao noteDao = new NoteDaoImpl(databaseConnection);
@@ -41,7 +44,7 @@ public class InitListener implements ServletContextListener {
         context.setAttribute("chatMessageDao", chatMessageDao);
         context.setAttribute("raceResultDao", raceResultDao);
 
-        UserService userService = new UserServiceImpl(userDao);
+        UserService userService = new UserServiceImpl(userDao, cloudinary);
         NoteService noteService = new NoteServiceImpl(noteDao);
         TeamService teamService = new TeamServiceImpl(teamDao);
         DriverService driverService = new DriverServiceImpl(driverDao);

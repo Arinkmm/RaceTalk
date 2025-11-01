@@ -34,6 +34,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void update(User user) {
+        String sql = "UPDATE users SET username = ?, password = ?, status = ?, photo = ? WHERE id = ?";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getPhoto());
+            ps.setString(4, user.getStatus());
+            ps.setInt(5, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error updating user for id {}", user.getId(), e);
+            throw new DataAccessException("Failed to update note", e);
+        }
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection connection = databaseConnection.getConnection();

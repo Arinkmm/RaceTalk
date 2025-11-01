@@ -2,6 +2,7 @@ package com.racetalk.service;
 
 import com.racetalk.entity.User;
 
+import java.io.InputStream;
 import java.util.Optional;
 
 public interface UserService {
@@ -9,7 +10,12 @@ public interface UserService {
 
     Optional<User> loginUser(String username, String password);
 
+    void editUser(User user, InputStream photoInputStream);
+
     Optional<User> getById(int id);
 
     boolean isUsernameUnique(String username);
-}
+
+    boolean verifyPassword(User user, String password);
+
+    }

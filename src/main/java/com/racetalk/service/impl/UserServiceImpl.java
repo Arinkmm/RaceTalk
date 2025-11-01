@@ -1,22 +1,30 @@
 package com.racetalk.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.racetalk.dao.UserDao;
 import com.racetalk.entity.User;
 import com.racetalk.exception.DataAccessException;
 import com.racetalk.exception.ServiceException;
 import com.racetalk.service.UserService;
 import com.racetalk.util.PasswordHasherUtil;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserDao userDao;
+    private final Cloudinary cloudinary;
 
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, Cloudinary cloudinary) {
         this.userDao = userDao;
+        this.cloudinary = cloudinary;
     }
 
     @Override
@@ -42,6 +50,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void editUser(User user, InputStream photoInputStream) {
+        Map uploadResult;
+        try {
+            if (photoInputStream != null) {
+                uploadResult = cloudinary.uploader().upload(photoInputStream, new HashMap());
+                String photoUrl = (String) uploadResult.get("photo_url");
+                user.setPhoto(photoUrl);
+            }
+            userDao.update(user);
+        } catch (Exception e) {
+            throw new ServiceException("Failed to update user with photo", e);
+        }
+    }
+
+    @Override
     public Optional<User> getById(int id) {
         try {
             return userDao.findById(id);
@@ -59,5 +82,17 @@ public class UserServiceImpl implements UserService {
             logger.error("Failed to check username uniqueness for {}", username, e);
             throw new ServiceException("Check username uniqueness failed", e);
         }
+    }
+
+    @Override
+    public boolean verifyPassword(User user, String password) {
+        if (user == null || password == null) {
+            return false;
+        }
+        String hashedPassword = user.getPassword();
+        if (hashedPassword == null) {
+            return false;
+        }
+        return BCrypt.checkpw(password, hashedPassword);
     }
 }
