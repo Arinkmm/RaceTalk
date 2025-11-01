@@ -24,4 +24,8 @@ public interface UserService {
     String hashPassword(String password);
 
     boolean validateUsername(String username);
+
+    void changeUserRole(int userId, UserRole role);
+
+    boolean isAdmin(User user);
 }

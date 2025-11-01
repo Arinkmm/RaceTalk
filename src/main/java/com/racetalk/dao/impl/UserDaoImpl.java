@@ -2,6 +2,7 @@ package com.racetalk.dao.impl;
 
 import com.racetalk.dao.UserDao;
 import com.racetalk.entity.User;
+import com.racetalk.entity.UserRole;
 import com.racetalk.exception.DataAccessException;
 import com.racetalk.util.DatabaseConnectionUtil;
 import org.slf4j.Logger;
@@ -20,33 +21,36 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void create(User user) {
-        String sql = "INSERT INTO users (username, password, status, photo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, password, status, photo, role) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getStatus());
             ps.setString(4, user.getPhoto());
+            ps.setString(5, user.getRole().name());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error creating user with username {}", user.getUsername(), e);
-            throw new DataAccessException("Failed to create user", e);        }
+            throw new DataAccessException("Failed to create user", e);
+        }
     }
 
     @Override
     public void update(User user) {
-        String sql = "UPDATE users SET username = ?, password = ?, status = ?, photo = ? WHERE id = ?";
+        String sql = "UPDATE users SET username = ?, password = ?, status = ?, photo = ?, role = ? WHERE id = ?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getStatus());
             ps.setString(4, user.getPhoto());
-            ps.setInt(5, user.getId());
+            ps.setString(5, user.getRole().name());
+            ps.setInt(6, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error updating user for id {}", user.getId(), e);
-            throw new DataAccessException("Failed to update note", e);
+            throw new DataAccessException("Failed to update user", e);
         }
     }
 
@@ -58,23 +62,7 @@ public class UserDaoImpl implements UserDao {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                String status = rs.getString("status");
-                if (rs.wasNull()) {
-                    status = null;
-                }
-
-                String photo = rs.getString("photo");
-                if (rs.wasNull()) {
-                    photo = null;
-                }
-
-                user.setStatus(status);
-                user.setPhoto(photo);
-
+                User user = mapUser(rs);
                 return Optional.of(user);
             }
             return Optional.empty();
@@ -92,23 +80,7 @@ public class UserDaoImpl implements UserDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                String status = rs.getString("status");
-                if (rs.wasNull()) {
-                    status = null;
-                }
-
-                String photo = rs.getString("photo");
-                if (rs.wasNull()) {
-                    photo = null;
-                }
-
-                user.setStatus(status);
-                user.setPhoto(photo);
-
+                User user = mapUser(rs);
                 return Optional.of(user);
             }
             return Optional.empty();
@@ -116,5 +88,31 @@ public class UserDaoImpl implements UserDao {
             logger.error("Error finding user by id {}", id, e);
             throw new DataAccessException("Failed to find user by id", e);
         }
+    }
+
+    @Override
+    public void updateRole(int userId, UserRole role) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, role.name());
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error updating user role for id {}", userId, e);
+            throw new DataAccessException("Failed to update user role", e);
+        }
+    }
+
+    private User mapUser(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setUsername(rs.getString("username"));
+        user.setPassword(rs.getString("password"));
+        user.setStatus(rs.getString("status"));
+        user.setPhoto(rs.getString("photo"));
+        String role = rs.getString("role");
+        user.setRole(role != null ? UserRole.valueOf(role) : UserRole.USER);
+        return user;
     }
 }

@@ -84,6 +84,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isAdmin(User user) {
+        return user != null && user.getRole() == UserRole.ADMIN;
+    }
+
+    @Override
+    public void changeUserRole(int userId, UserRole role) {
+        try {
+            userDao.updateRole(userId, role);
+        } catch (DataAccessException e) {
+            logger.error("Failed to change role for user id {}", userId, e);
+            throw new ServiceException("Failed to change role", e);
+        }
+    }
+
+    @Override
     public boolean isUsernameUnique(String username) {
         try {
             return userDao.findByUsername(username).isEmpty();

@@ -6,28 +6,38 @@ public class User {
     private String password;
     private String status;
     private String photo;
+    private UserRole role;
 
     public User() {}
 
-    public User(int id, String username, String password, String status, String photo) {
+    public User(int id, String username, String password, String status, String photo, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
         this.photo = photo;
+        this.role = role;
     }
 
-    public User(String username, String password, String status, String photo) {
+    public User(String username, String password, String status, String photo, UserRole role) {
         this.username = username;
         this.password = password;
         this.status = status;
         this.photo = photo;
+        this.role = role;
     }
 
-    public User(String username, String password, String status) {
+    public User(String username, String password, String status, UserRole role) {
         this.username = username;
         this.password = password;
         this.status = status;
+        this.role = role;
+    }
+
+    public User(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public User(String username, String password) {
@@ -58,5 +68,13 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

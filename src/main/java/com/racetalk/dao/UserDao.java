@@ -1,6 +1,7 @@
 package com.racetalk.dao;
 
 import com.racetalk.entity.User;
+import com.racetalk.entity.UserRole;
 
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ public interface UserDao {
     void create(User user);
 
     void update(User user);
+
+    void updateRole(int userId, UserRole role);
 
     Optional<User> findByUsername(String username);
 
