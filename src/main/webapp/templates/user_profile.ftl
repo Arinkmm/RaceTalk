@@ -28,7 +28,9 @@
         <p class="username">${user.username}</p>
         <p class="status text-muted fst-italic mb-3">${user.status!''}</p>
 
-        <a href="${contextPath}/user/edit/${user.id}" class="btn btn-main mt-2">Редактировать</a>
+        <#if isOwner>
+            <a href="${contextPath}/user/edit" class="btn btn-main mt-2">Редактировать</a>
+        </#if>
     </div>
 </section>
 
