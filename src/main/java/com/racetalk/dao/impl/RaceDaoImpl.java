@@ -42,6 +42,24 @@ public class RaceDaoImpl implements RaceDao {
         }
     }
 
+    @Override
+    public void createUpcomingRace(Race race) {
+        String sql = "INSERT INTO upcoming_races (location, race_date, is_finished) VALUES (?, ?, ?) RETURNING id";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, race.getLocation());
+            ps.setDate(2, Date.valueOf(race.getRaceDate()));
+            ps.setBoolean(3, race.isFinished());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                race.setId(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            logger.error("Error creating past race: {}", race, e);
+            throw new DataAccessException("Failed to create past race", e);
+        }
+    }
 
     @Override
     public void updatePastRace(Race race) {

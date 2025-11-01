@@ -31,6 +31,16 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
+    public void addRace(Race race) {
+        try {
+            raceDao.createUpcomingRace(race);
+        } catch (DataAccessException e) {
+            logger.error("Failed to create upcoming race {}", race.getId(), e);
+            throw new ServiceException("Could not create upcoming race", e);
+        }
+    }
+
+    @Override
     public List<Race> getUpcomingRaces() {
         try {
             return raceDao.findUpcomingRaces();

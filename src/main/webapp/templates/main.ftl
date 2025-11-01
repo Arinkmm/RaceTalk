@@ -19,7 +19,6 @@
     </div>
 </nav>
 
-
 <section class="hero d-flex justify-content-start align-items-center">
     <div class="hero-content">
         <h1 class="hero-title">Добро пожаловать, ${user.username}!</h1>
@@ -58,7 +57,11 @@
             </table>
         </div>
     <#else>
-    <p class="text-muted">Нет запланированных гонок</p>
+        <p class="text-muted">Нет запланированных гонок</p>
+    </#if>
+
+    <#if isAdmin?? && isAdmin>
+        <a href="${contextPath}/race/create" class="btn btn-main mt-2">Добавить гонку</a>
     </#if>
 </main>
 

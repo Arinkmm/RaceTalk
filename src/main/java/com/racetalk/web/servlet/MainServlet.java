@@ -2,8 +2,10 @@ package com.racetalk.web.servlet;
 
 import com.racetalk.entity.Race;
 import com.racetalk.entity.User;
+import com.racetalk.entity.UserRole;
 import com.racetalk.exception.ServiceException;
 import com.racetalk.service.RaceService;
+import com.racetalk.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +20,14 @@ public class MainServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(MainServlet.class);
 
     private RaceService raceService;
+    private UserService userService;
 
     @Override
     public void init() {
         raceService = (RaceService) getServletContext().getAttribute("raceService");
-        if (raceService == null) {
-            throw new IllegalStateException("RaceService not initialized");
+        userService = (UserService) getServletContext().getAttribute("userService");
+        if (raceService == null || userService == null) {
+            throw new IllegalStateException("Services are not initialized");
         }
     }
 
@@ -31,9 +35,11 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             HttpSession session = req.getSession(false);
-
             User user = (User) session.getAttribute("user");
             req.setAttribute("user", user);
+
+            boolean isAdmin = userService.isAdmin(user);
+            req.setAttribute("isAdmin", isAdmin);
 
             List<Race> races = raceService.getUpcomingRaces();
             req.setAttribute("races", races);

@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface RaceDao {
     void createPastRace(Race race);
 
+    void createUpcomingRace(Race race);
+
     void updatePastRace(Race race);
 
     void deleteUpcomingRacesByDate(LocalDate date);

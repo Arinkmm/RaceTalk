@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RaceService {
+    void addRace(Race race);
+
     void deleteUpcomingRacesByDate(LocalDate date);
 
     List<Race> getUpcomingRaces();
