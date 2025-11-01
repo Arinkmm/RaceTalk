@@ -40,8 +40,8 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
-            ps.setString(3, user.getPhoto());
-            ps.setString(4, user.getStatus());
+            ps.setString(3, user.getStatus());
+            ps.setString(4, user.getPhoto());
             ps.setInt(5, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -66,13 +66,15 @@ public class UserDaoImpl implements UserDao {
                 if (rs.wasNull()) {
                     status = null;
                 }
-                user.setStatus(status);
 
                 String photo = rs.getString("photo");
                 if (rs.wasNull()) {
                     photo = null;
                 }
+
+                user.setStatus(status);
                 user.setPhoto(photo);
+
                 return Optional.of(user);
             }
             return Optional.empty();
@@ -98,13 +100,15 @@ public class UserDaoImpl implements UserDao {
                 if (rs.wasNull()) {
                     status = null;
                 }
-                user.setStatus(status);
 
                 String photo = rs.getString("photo");
                 if (rs.wasNull()) {
                     photo = null;
                 }
+
+                user.setStatus(status);
                 user.setPhoto(photo);
+
                 return Optional.of(user);
             }
             return Optional.empty();

@@ -53,9 +53,12 @@ public class UserServiceImpl implements UserService {
     public void editUser(User user, InputStream photoInputStream) {
         Map uploadResult;
         try {
-            if (photoInputStream != null) {
-                uploadResult = cloudinary.uploader().upload(photoInputStream, new HashMap());
-                String photoUrl = (String) uploadResult.get("photo_url");
+            if (photoInputStream != null && photoInputStream.available() > 0) {
+                byte[] photoBytes = photoInputStream.readAllBytes();
+
+                uploadResult = cloudinary.uploader().upload(photoBytes, new HashMap<>());
+
+                String photoUrl = (String) uploadResult.get("secure_url");
                 user.setPhoto(photoUrl);
             }
             userDao.update(user);
