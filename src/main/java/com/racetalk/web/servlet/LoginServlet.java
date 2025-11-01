@@ -42,10 +42,10 @@ public class LoginServlet extends HttpServlet {
                 User user = userOpt.get();
 
                 HttpSession httpSession = req.getSession();
-                httpSession.setAttribute("userId", user.getId());
+                httpSession.setAttribute("user", user);
                 httpSession.setMaxInactiveInterval(60 * 60);
 
-                Cookie cookie = new Cookie("userId", String.valueOf(user.getId()));
+                Cookie cookie = new Cookie("user", String.valueOf(user.getId()));
                 cookie.setMaxAge(24 * 60 * 60);
 
                 resp.addCookie(cookie);

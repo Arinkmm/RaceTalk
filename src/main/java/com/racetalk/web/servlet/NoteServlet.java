@@ -37,9 +37,7 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            int currentUserId = (int) req.getSession().getAttribute("userId");
-            Optional<User> currentUserOpt = userService.getById(currentUserId);
-            User currentUser = currentUserOpt.get();
+            User currentUser = (User) req.getSession().getAttribute("user");
             List<Note> notes = noteService.getUserNotes(currentUser);
             req.setAttribute("notes", notes);
 
@@ -54,9 +52,7 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
-            int currentUserId = (int) req.getSession().getAttribute("userId");
-            Optional<User> currentUserOpt = userService.getById(currentUserId);
-            User currentUser = currentUserOpt.get();
+            User currentUser = (User) req.getSession().getAttribute("user");
 
             String action = req.getParameter("action");
 

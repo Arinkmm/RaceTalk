@@ -1,6 +1,7 @@
 package com.racetalk.web.servlet;
 
 import com.racetalk.entity.Race;
+import com.racetalk.entity.User;
 import com.racetalk.exception.ServiceException;
 import com.racetalk.service.RaceService;
 import org.slf4j.Logger;
@@ -31,8 +32,8 @@ public class MainServlet extends HttpServlet {
         try {
             HttpSession session = req.getSession(false);
 
-            String username = (String) session.getAttribute("user");
-            req.setAttribute("user", username);
+            User user = (User) session.getAttribute("user");
+            req.setAttribute("user", user);
 
             List<Race> races = raceService.getUpcomingRaces();
             req.setAttribute("races", races);

@@ -20,7 +20,7 @@
 
 <section class="hero d-flex justify-content-start align-items-center">
     <div class="hero-content">
-        <h1 class="hero-title">Добро пожаловать, ${user}!</h1>
+        <h1 class="hero-title">Добро пожаловать, ${user.username}!</h1>
         <p class="hero-desc">Следите за предстоящими гонками Формулы 1 и обсуждайте их с сообществом фанатов</p>
         <a href="${contextPath}/chat" class="btn btn-main mt-2">Перейти в чат</a>
     </div>

@@ -41,11 +41,11 @@ public class AuthenticationFilter implements Filter {
         } else {
             HttpSession session = req.getSession(false);
 
-            if (session == null || session.getAttribute("userId") == null) {
+            if (session == null || session.getAttribute("user") == null) {
                 String userIdFromCookie = null;
                 if (req.getCookies() != null) {
                     for (Cookie cookie : req.getCookies()) {
-                        if ("userId".equals(cookie.getName())) {
+                        if ("user".equals(cookie.getName())) {
                             userIdFromCookie = cookie.getValue();
                             break;
                         }
@@ -53,7 +53,7 @@ public class AuthenticationFilter implements Filter {
                 }
                 if (userIdFromCookie != null) {
                     session = req.getSession(true);
-                    session.setAttribute("userId", userIdFromCookie);
+                    session.setAttribute("user", userIdFromCookie);
                     chain.doFilter(request, response);
                 } else {
                     res.sendRedirect(req.getContextPath() + "/login");

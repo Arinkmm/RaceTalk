@@ -42,16 +42,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getByUsername(String username) {
-        try {
-            return userDao.findByUsername(username);
-        } catch (DataAccessException e) {
-            logger.error("Failed to get user by username {}", username, e);
-            throw new ServiceException("Failed to get user", e);
-        }
-    }
-
-    @Override
     public boolean isUsernameUnique(String username) {
         try {
             return userDao.findByUsername(username).isEmpty();
