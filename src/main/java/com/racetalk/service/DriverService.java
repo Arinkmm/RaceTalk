@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DriverService {
+    void updateDriverTeam(int driverNumber, int newTeam);
+
     List<Driver> getAllDrivers();
 
     Optional<Driver> getByDriverNumber(int driverNumber);

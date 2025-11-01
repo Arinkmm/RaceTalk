@@ -2,10 +2,10 @@ package com.racetalk.web.servlet;
 
 import com.racetalk.entity.Driver;
 import com.racetalk.entity.RaceResult;
+import com.racetalk.entity.Team;
+import com.racetalk.entity.User;
 import com.racetalk.exception.ServiceException;
-import com.racetalk.service.DriverService;
-import com.racetalk.service.RaceResultService;
-import com.racetalk.service.RaceService;
+import com.racetalk.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +24,16 @@ public class DriverProfileServlet extends HttpServlet {
 
     private DriverService driverService;
     private RaceResultService raceResultService;
+    private UserService userService;
+    private TeamService teamService;
 
     @Override
     public void init() {
         driverService = (DriverService) getServletContext().getAttribute("driverService");
         raceResultService = (RaceResultService) getServletContext().getAttribute("raceResultService");
-        if (driverService == null || raceResultService == null) {
+        userService = (UserService) getServletContext().getAttribute("userService");
+        teamService = (TeamService) getServletContext().getAttribute("teamService");
+        if (driverService == null || raceResultService == null || userService == null || teamService == null) {
             throw new IllegalStateException("Services are not initialized");
         }
     }
@@ -64,15 +68,68 @@ public class DriverProfileServlet extends HttpServlet {
                 return;
             }
 
+
             Driver driver = driverOptional.get();
             req.setAttribute("driver", driver);
 
             List<RaceResult> raceResults = raceResultService.getResultsByDriverNumber(driverNumber);
             req.setAttribute("raceResults", raceResults);
 
+            List<Team> teams = teamService.getAllTeams();
+            req.setAttribute("teams", teams);
+
+            User loggedUser = (User) req.getSession().getAttribute("user");
+            req.setAttribute("user", loggedUser);
+
+            boolean isAdmin = userService.isAdmin(loggedUser);
+            req.setAttribute("isAdmin", isAdmin);
+
+
             req.getRequestDispatcher("/templates/driver_profile.ftl").forward(req, resp);
         } catch (ServiceException e) {
             logger.error("Error loading driver profile for driver number {}", driverNumber, e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            req.getRequestDispatcher("/error").forward(req, resp);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User currentUser = (User) req.getSession().getAttribute("user");
+        if (currentUser == null || !userService.isAdmin(currentUser)) {
+            req.setAttribute("errorMessage", "Доступ запрещён");
+            req.setAttribute("statusCode", 403);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
+            req.setAttribute("errorMessage", "Номер гонщика не найден");
+            req.setAttribute("statusCode", 400);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+
+        String driverNumberStr = pathInfo.substring(1);
+        int driverNumber;
+        try {
+            driverNumber = Integer.parseInt(driverNumberStr);
+        } catch (NumberFormatException e) {
+            req.setAttribute("errorMessage", "Неверный формат номера гонщика");
+            req.setAttribute("statusCode", 400);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+
+        String newTeamIdStr = req.getParameter("team");
+
+        try {
+            int newTeamId = Integer.parseInt(newTeamIdStr);
+            driverService.updateDriverTeam(driverNumber, newTeamId);
+            resp.sendRedirect(req.getContextPath() + "/driver/" + driverNumber);
+        } catch (ServiceException e) {
+            logger.error("Error updating driver team", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             req.getRequestDispatcher("/error").forward(req, resp);
         }

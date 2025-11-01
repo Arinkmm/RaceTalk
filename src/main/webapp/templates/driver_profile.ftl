@@ -33,6 +33,26 @@
             <#assign dobDate = driver.dateOfBirth?date("yyyy-MM-dd")>
             ${dobDate?string("dd.MM.yyyy")}
         </p>
+
+        <#if isAdmin>
+            <button class="btn btn-main" type="button" data-bs-toggle="collapse" data-bs-target="#editTeamForm" aria-expanded="false" aria-controls="editTeamForm">
+                Редактировать команду
+            </button>
+
+            <div class="collapse mt-3" id="editTeamForm">
+                <form method="post" action="${contextPath}/driver/${driver.driverNumber}">
+                    <div class="mb-3">
+                        <label class="form-label">Выберите новую команду</label>
+                        <select id="teamSelect" name="team" class="form-select" required>
+                            <#list teams as teamOption>
+                                <option value="${teamOption.id}" <#if teamOption.id == driver.team.id>selected</#if>>${teamOption.name}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-main">Сохранить</button>
+                </form>
+            </div>
+        </#if>
     </div>
 </section>
 
@@ -85,6 +105,9 @@
 <footer>
     &copy; 2025 RaceTalk. Все права защищены.
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

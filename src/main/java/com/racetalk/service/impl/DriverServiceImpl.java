@@ -20,6 +20,16 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public void updateDriverTeam(int driverNumber, int newTeam) {
+        try {
+            driverDao.updateTeam(driverNumber, newTeam);
+        } catch (DataAccessException e) {
+            logger.error("Failed to update driver team", e);
+            throw new ServiceException("Could not update driver team", e);
+        }
+    }
+
+    @Override
     public List<Driver> getAllDrivers() {
         try {
             return driverDao.findAll();

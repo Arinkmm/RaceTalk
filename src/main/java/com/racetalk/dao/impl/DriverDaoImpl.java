@@ -48,6 +48,20 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    public void updateTeam(int driverNumber, int newTeam) {
+        String sql = "UPDATE drivers SET team_id = ? WHERE driver_number = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newTeam);
+            ps.setInt(2, driverNumber);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error updating team for driver number {}", driverNumber, e);
+            throw new DataAccessException("Failed to update driver team", e);
+        }
+    }
+
+    @Override
     public Optional<Driver> findByDriverNumber(int driverNumber) {
         String sql = "SELECT * FROM drivers WHERE driver_number = ?";
         try (Connection connection = databaseConnection.getConnection();
