@@ -50,6 +50,7 @@ section.hero {
     font-weight: bold;
     color: #c1121f;
     margin-right: .5em;
+    text-decoration: underline;
 }
 
 .msg-time {
@@ -76,4 +77,10 @@ section.hero {
 
 .chat-form button:hover {
     background: #9e0e1a;
+}
+
+.photo {
+    width:30px;
+    height:30px;
+    object-fit: cover;
 }

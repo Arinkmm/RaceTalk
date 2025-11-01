@@ -46,7 +46,9 @@ public class ChatHandler extends HttpServlet {
 
             List<Map<String, String>> jsonList = messages.stream()
                     .map(m -> Map.of(
-                            "username", m.getUser() != null ? m.getUser().getUsername() : "Аноним",
+                            "userId", String.valueOf(m.getUser().getId()),
+                            "username", m.getUser().getUsername(),
+                            "photo", m.getUser().getPhoto() != null ? m.getUser().getPhoto() : "",
                             "content", m.getContent(),
                             "createdAt", m.getCreatedAt().toString()
                     ))
@@ -77,8 +79,14 @@ public class ChatHandler extends HttpServlet {
 
             mapper.writeValue(resp.getWriter(), Map.of(
                     "success", true,
+                    "userId", String.valueOf(currentUser.getId()),
                     "username", currentUser.getUsername(),
-                    "createdAt", message.getCreatedAt().toString()));
+                    "photo", currentUser.getPhoto() != null ? currentUser.getPhoto() : "",
+                    "content", message.getContent(),
+                    "createdAt", message.getCreatedAt().toString()
+            ));
+
+
         } catch (ServiceException e) {
             logger.error("Failed to post chat message", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
