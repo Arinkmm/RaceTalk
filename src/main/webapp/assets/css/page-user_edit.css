@@ -1,0 +1,20 @@
+.container-edit-profile {
+    max-width: 550px;
+    margin: 3rem auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 30px rgba(201,18,30,0.2);
+    padding: 2rem 3rem;
+}
+
+.hero-title {
+    color: #c1121f;
+}
+
+.validation-error {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #c1121f;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
