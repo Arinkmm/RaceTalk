@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
             }
             userDao.update(user);
         } catch (Exception e) {
+            logger.error("Failed to update user", e);
             throw new ServiceException("Failed to update user with photo", e);
         }
     }

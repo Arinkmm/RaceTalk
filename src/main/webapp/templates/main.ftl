@@ -61,7 +61,9 @@
     </#if>
 
     <#if isAdmin?? && isAdmin>
-        <a href="${contextPath}/race/create" class="btn btn-main mt-2">Добавить гонку</a>
+        <div class="d-flex justify-content-center mt-2">
+            <a href="${contextPath}/race/create" class="btn btn-main">Добавить гонку</a>
+        </div>
     </#if>
 </main>
 

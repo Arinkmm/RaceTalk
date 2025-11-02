@@ -13,7 +13,7 @@
     <a class="navbar-brand" href="${contextPath}/main">RaceTalk</a>
     <div class="collapse navbar-collapse justify-content-end">
         <div class="navbar-nav">
-            <a class="nav-link text-danger fw-bold d-flex align-items-center" href="${contextPath}/races" role="button">
+            <a class="nav-link text-danger fw-bold d-flex align-items-center" href="${contextPath}/user/profile/${user.id}" role="button">
                 &#8592;
                 <span class="ms-2">Назад</span>
             </a>

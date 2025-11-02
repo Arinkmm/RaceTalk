@@ -103,7 +103,7 @@ public class DriverCreateServlet extends HttpServlet {
         } catch (Exception e) {
             logger.error("Failed to create driver", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            req.getRequestDispatcher("/templates/driver_create.ftl").forward(req, resp);
+            req.getRequestDispatcher("/error").forward(req, resp);
         }
     }
 }

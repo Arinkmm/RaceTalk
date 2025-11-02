@@ -40,6 +40,7 @@ public class DriverServiceImpl implements DriverService {
             }
             driverDao.create(driver);
         } catch (Exception e) {
+            logger.error("Failed to create driver", e);
             throw new ServiceException("Failed to create driver with photo", e);
         }
     }

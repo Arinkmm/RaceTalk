@@ -47,8 +47,8 @@
             </tbody>
         </table>
         <#if isAdmin?? && isAdmin>
-            <div class="add-button">
-                <a href="${contextPath}/driver/create" class="btn btn-main">Добавить гонщика</a>
+            <div class="d-flex justify-content-center mt-2">
+                <a href="${contextPath}/race/create" class="btn btn-main">Добавить гонщика</a>
             </div>
         </#if>
     </div>

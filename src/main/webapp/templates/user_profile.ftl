@@ -15,7 +15,11 @@
 
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">Ваш профиль</h1>
+        <#if isOwner>
+            <h1 class="hero-title">Ваш профиль</h1>
+        <#else>
+            <h1 class="hero-title">Профиль пользователя</h1>
+        </#if>
 
         <#if user.photo?? && user.photo?has_content>
             <a href="${user.photo}">
