@@ -31,7 +31,9 @@
     <a href="${contextPath}/drivers" class="btn btn-link">Гонщики</a>
     <a href="${contextPath}/teams" class="btn btn-link">Команды</a>
     <a href="${contextPath}/races" class="btn btn-link">Прошедшие гонки</a>
-    <a href="${contextPath}/notes" class="btn btn-link">Заметки</a>
+    <#if !isAdmin>
+        <a href="${contextPath}/notes" class="btn btn-link">Заметки</a>
+    </#if>
 </div>
 
 <main class="container my-5">

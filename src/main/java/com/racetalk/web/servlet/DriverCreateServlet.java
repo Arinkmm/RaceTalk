@@ -44,10 +44,8 @@ public class DriverCreateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user == null || !userService.isAdmin(user)) {
-            req.setAttribute("errorMessage", "Доступ запрещён");
-            req.setAttribute("statusCode", 403);
-            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+        if (!userService.isAdmin(user)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
@@ -58,17 +56,15 @@ public class DriverCreateServlet extends HttpServlet {
         } catch (ServiceException e) {
             logger.error("Error to loading driver create", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            req.getRequestDispatcher("/templates/driver_create.ftl").forward(req, resp);
+            req.getRequestDispatcher("/error").forward(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user == null || !userService.isAdmin(user)) {
-            req.setAttribute("errorMessage", "Доступ запрещён");
-            req.setAttribute("statusCode", 403);
-            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+        if (!userService.isAdmin(user)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 

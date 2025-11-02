@@ -38,10 +38,8 @@ public class TeamCreateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user == null || !userService.isAdmin(user)) {
-            req.setAttribute("errorMessage", "Доступ запрещён");
-            req.setAttribute("statusCode", 403);
-            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+        if (!userService.isAdmin(user)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
         req.getRequestDispatcher("/templates/team_create.ftl").forward(req, resp);
@@ -50,10 +48,8 @@ public class TeamCreateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user == null || !userService.isAdmin(user)) {
-            req.setAttribute("errorMessage", "Доступ запрещён");
-            req.setAttribute("statusCode", 403);
-            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+        if (!userService.isAdmin(user)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 

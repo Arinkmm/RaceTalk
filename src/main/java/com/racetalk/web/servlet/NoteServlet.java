@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/notes")
+@WebServlet(name = "Note", urlPatterns = "/notes")
 public class NoteServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(NoteServlet.class);
 
@@ -29,7 +29,7 @@ public class NoteServlet extends HttpServlet {
     public void init() {
         noteService = (NoteService) getServletContext().getAttribute("noteService");
         userService = (UserService) getServletContext().getAttribute("userService");
-        if (noteService == null) {
+        if (noteService == null || userService == null) {
             throw new IllegalStateException("Services are not initialized");
         }
     }
@@ -38,6 +38,11 @@ public class NoteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             User currentUser = (User) req.getSession().getAttribute("user");
+            if (userService.isAdmin(currentUser)) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
             List<Note> notes = noteService.getUserNotes(currentUser);
             req.setAttribute("notes", notes);
 
@@ -53,6 +58,10 @@ public class NoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
             User currentUser = (User) req.getSession().getAttribute("user");
+            if (userService.isAdmin(currentUser)) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
 
             String action = req.getParameter("action");
 

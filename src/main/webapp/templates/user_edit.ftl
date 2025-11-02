@@ -30,7 +30,7 @@
         <div class="validation-error hidden"></div>
     </#if>
 
-    <form method="POST" action="${contextPath}/user/profile/${user.id}" enctype="multipart/form-data" novalidate>
+    <form method="POST" action="${contextPath}/user/edit" enctype="multipart/form-data" novalidate>
         <div class="mb-3">
             <label class="form-label fw-bold text-danger">Изменить фото</label>
             <input class="form-control" type="file" name="photo" accept="image/*">
