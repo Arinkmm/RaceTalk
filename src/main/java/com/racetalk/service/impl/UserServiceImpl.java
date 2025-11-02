@@ -75,6 +75,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(int id) {
+        try {
+            userDao.deleteById(id);
+        } catch (DataAccessException e) {
+            logger.error("Failed to delete user with id {}", id, e);
+            throw new ServiceException("Failed to delete user", e);
+        }
+    }
+
+    @Override
     public Optional<User> getById(int id) {
         try {
             return userDao.findById(id);

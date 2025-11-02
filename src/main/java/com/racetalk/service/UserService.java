@@ -13,6 +13,8 @@ public interface UserService {
 
     void editUser(User user, InputStream photoInputStream);
 
+    void deleteUser(int id);
+
     Optional<User> getById(int id);
 
     boolean isUsernameUnique(String username);

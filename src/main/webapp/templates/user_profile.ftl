@@ -31,9 +31,14 @@
 
         <p class="username">${user.username}</p>
         <p class="status text-muted fst-italic mb-3">${user.status!''}</p>
-
-        <#if isOwner>
+        <#if canEdit>
             <a href="${contextPath}/user/edit" class="btn btn-main mt-2">Редактировать</a>
+        </#if>
+        <#if canDelete>
+            <form method="post" action="${contextPath}/user/profile/${user.id}">
+                <input type="hidden" name="action" value="delete" />
+                <button type="submit" class="btn btn-main mt-2">Удалить профиль</button>
+            </form>
         </#if>
     </div>
 </section>

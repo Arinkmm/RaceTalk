@@ -55,6 +55,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void deleteById(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error deleting user id {}", id, e);
+            throw new DataAccessException("Failed to delete user by id", e);
+        }
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection connection = databaseConnection.getConnection();

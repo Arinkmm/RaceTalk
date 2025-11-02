@@ -66,7 +66,20 @@ public class UserProfileServlet extends HttpServlet {
             req.setAttribute("user", currentUser);
 
             User loggedUser = (User) req.getSession().getAttribute("user");
-            req.setAttribute("isOwner",loggedUser.getId() == currentUser.getId());
+
+            boolean isOwner = false;
+            boolean canDelete = false;
+            boolean canEdit = false;
+
+            if (loggedUser != null) {
+                isOwner = loggedUser.getId() == currentUser.getId();
+                canEdit = isOwner;
+                canDelete = userService.isAdmin(loggedUser) || isOwner;
+            }
+
+            req.setAttribute("isOwner", isOwner);
+            req.setAttribute("canDelete", canDelete);
+            req.setAttribute("canEdit", canEdit);
 
             req.getRequestDispatcher("/templates/user_profile.ftl").forward(req, resp);
 
@@ -74,6 +87,48 @@ public class UserProfileServlet extends HttpServlet {
             logger.error("Error loading user profile", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             req.getRequestDispatcher("/error").forward(req, resp);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+
+        if ("delete".equals(action)) {
+            String pathInfo = req.getPathInfo();
+            if (pathInfo == null) {
+                req.setAttribute("errorMessage", "Id пользователя не найдено");
+                req.setAttribute("statusCode", 400);
+                req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+                return;
+            }
+
+            int userId;
+            try {
+                userId = Integer.parseInt(pathInfo.substring(1));
+            } catch (NumberFormatException e) {
+                req.setAttribute("errorMessage", "Неверный формат ID пользователя");
+                req.setAttribute("statusCode", 400);
+                req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+                return;
+            }
+
+            try {
+                Optional<User> currentUserOpt = userService.getById(userId);
+                if (currentUserOpt.isEmpty()) {
+                    req.setAttribute("errorMessage", "Пользователь не найден");
+                    req.setAttribute("statusCode", 404);
+                    req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+                    return;
+                }
+
+                userService.deleteUser(userId);
+                resp.sendRedirect(req.getContextPath() + "/");
+            } catch (Exception e) {
+                logger.error("Error deleting user", e);
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                req.getRequestDispatcher("/error").forward(req, resp);
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ public interface UserDao {
 
     void update(User user);
 
+    void deleteById(int id);
+
     void updateRole(int userId, UserRole role);
 
     Optional<User> findByUsername(String username);
