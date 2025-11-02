@@ -47,7 +47,7 @@ public class InitListener implements ServletContextListener {
         UserService userService = new UserServiceImpl(userDao, cloudinary);
         NoteService noteService = new NoteServiceImpl(noteDao);
         TeamService teamService = new TeamServiceImpl(teamDao);
-        DriverService driverService = new DriverServiceImpl(driverDao);
+        DriverService driverService = new DriverServiceImpl(driverDao, cloudinary);
         RaceService raceService = new RaceServiceImpl(raceDao);
         ChatMessageService chatMessageService = new ChatMessageServiceImpl(chatMessageDao);
         RaceResultService raceResultService = new RaceResultServiceImpl(raceResultDao);

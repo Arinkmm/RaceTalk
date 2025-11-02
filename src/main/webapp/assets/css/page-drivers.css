@@ -47,3 +47,9 @@ section.hero {
     text-align: center;
     width: 105px;
 }
+
+.add-button {
+    width:90vw;
+    max-width:1200px;
+    margin:0 auto 3rem auto;
+}

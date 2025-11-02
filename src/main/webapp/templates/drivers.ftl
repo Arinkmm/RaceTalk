@@ -32,7 +32,13 @@
             <tbody>
             <#list drivers as driver>
                 <tr onclick="window.location.href='${contextPath}/driver/${driver.driverNumber}';" style="cursor:pointer">
-                    <td><img src="${contextPath}/assets/images/driver-profile/${driver.photo!'default.jpg'}" class="photo"/></td>
+                    <td>
+                        <#if driver.photo??>
+                            <img src="${driver.photo}" class="photo"/>
+                        <#else>
+                            <img src="${contextPath}/assets/images/driver-profile/default.jpg" class="photo"/>
+                        </#if>
+                    </td>
                     <td class="driver-number">${driver.driverNumber}</td>
                     <td>${driver.firstName}</td>
                     <td>${driver.lastName}</td>
@@ -41,16 +47,11 @@
             </tbody>
         </table>
         <#if isAdmin?? && isAdmin>
-            <a href="${contextPath}/driver/create" class="btn btn-main mt-2 mb-2">Добавить гонщика</a>
+            <div class="add-button">
+                <a href="${contextPath}/driver/create" class="btn btn-main">Добавить гонщика</a>
+            </div>
         </#if>
     </div>
-
-
-    <#if isAdmin?? && isAdmin>
-        <div class="mt-3" style="max-width: fit-content;">
-            <a href="${contextPath}/driver/create" class="btn btn-main">Добавить гонщика</a>
-        </div>
-    </#if>
 </section>
 
 
