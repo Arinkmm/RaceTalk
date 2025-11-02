@@ -22,12 +22,12 @@ public class TeamDaoImpl implements TeamDao {
 
     @Override
     public void create(Team team) {
-        String sql = "INSERT INTO teams (name, country, founded_year, photo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO teams (name, country, photo) VALUES (?, ?, ?)";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, team.getName());
             ps.setString(2, team.getCountry());
-            ps.setString(4, team.getPhoto());
+            ps.setString(3, team.getPhoto());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error creating team: {}", team, e);

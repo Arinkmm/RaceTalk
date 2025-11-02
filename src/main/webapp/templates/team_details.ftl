@@ -24,7 +24,11 @@
 <section class="hero">
     <div class="hero-flex">
         <div class="team-logo-hero">
-            <img src="${contextPath}/assets/images/team-logo/${team.photo!'default.png'}" />
+            <#if team.photo??>
+                <img src="${team.photo}" class="team-logo"/>
+            <#else>
+                <img src="${contextPath}/assets/images/team-logo/default.jpg" class="team-logo"/>
+            </#if>
         </div>
         <div class="hero-content">
             <h1 class="hero-title">Результаты команды ${team.name}</h1>
@@ -52,7 +56,11 @@
             <#list drivers as driver>
                 <tr>
                     <td class="driver-cell">
-                        <img src="${contextPath}/assets/images/driver-profile/${driver.photo!'default.png'}" class="driver-photo" />
+                        <#if driver.photo??>
+                            <img src="${driver.photo}" class="driver-photo"/>
+                        <#else>
+                            <img src="${contextPath}/assets/images/driver-profile/default.jpg" class="driver-photo"/>
+                        </#if>
                         ${driver.firstName} ${driver.lastName}
                     </td>
                     <#list races as r>

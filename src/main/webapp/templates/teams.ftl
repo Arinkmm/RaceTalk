@@ -25,13 +25,22 @@
         <#list teams as team>
             <a href="${contextPath}/team/${team.id}" class="team-card-link">
                 <div class="team-card">
-                    <img src="${contextPath}/assets/images/team-logo/${team.photo!'default.png'}" class="team-logo" />
+                    <#if team.photo??>
+                        <img src="${team.photo}" class="team-logo"/>
+                    <#else>
+                        <img src="${contextPath}/assets/images/team-logo/default.jpg" class="team-logo"/>
+                    </#if>
                     <div class="team-name">${team.name}</div>
                     <div class="team-country">${team.country!""}</div>
                 </div>
             </a>
         </#list>
     </div>
+    <#if isAdmin?? && isAdmin>
+        <div class="d-flex justify-content-center mt-2">
+            <a href="${contextPath}/team/create" class="btn btn-main">Добавить команду</a>
+        </div>
+    </#if>
 </main>
 
 <footer>
