@@ -9,7 +9,6 @@ import com.racetalk.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "ChatHandler", urlPatterns = "/chat/handle")
@@ -46,6 +44,7 @@ public class ChatHandler extends HttpServlet {
 
             List<Map<String, String>> jsonList = messages.stream()
                     .map(m -> Map.of(
+                            "id", String.valueOf(m.getId()),
                             "userId", String.valueOf(m.getUser().getId()),
                             "username", m.getUser().getUsername(),
                             "photo", m.getUser().getPhoto() != null ? m.getUser().getPhoto() : "",
@@ -65,28 +64,36 @@ public class ChatHandler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            User currentUser = (User) req.getSession().getAttribute("user");
-
-            String messageText = req.getParameter("message");
             resp.setContentType("application/json;charset=UTF-8");
+            User currentUser = (User) req.getSession().getAttribute("user");
+            String messageText = req.getParameter("message");
+            String action = req.getParameter("action");
+
+            if ("delete".equals(action)) {
+                if (userService.isAdmin(currentUser)) {
+                    int messageId = Integer.parseInt(req.getParameter("id"));
+                    chatMessageService.deleteMessage(messageId);
+                    mapper.writeValue(resp.getWriter(), Map.of("success", true));
+                    return;
+                }
+            }
 
             ChatMessage message = new ChatMessage();
             message.setUser(currentUser);
-            message.setContent(messageText.trim());
+            message.setContent(messageText);
             message.setCreatedAt(LocalDateTime.now());
 
             chatMessageService.postMessage(message);
 
             mapper.writeValue(resp.getWriter(), Map.of(
                     "success", true,
+                    "id", String.valueOf(message.getId()),
                     "userId", String.valueOf(currentUser.getId()),
                     "username", currentUser.getUsername(),
                     "photo", currentUser.getPhoto() != null ? currentUser.getPhoto() : "",
                     "content", message.getContent(),
                     "createdAt", message.getCreatedAt().toString()
             ));
-
-
         } catch (ServiceException e) {
             logger.error("Failed to post chat message", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

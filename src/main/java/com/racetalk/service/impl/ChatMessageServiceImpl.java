@@ -29,6 +29,16 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
+    public void deleteMessage(int id) {
+        try {
+            chatMessageDao.deleteById(id);
+        } catch (DataAccessException e) {
+            logger.error("Failed to delete chat message", e);
+            throw new ServiceException("Could not delete chat message", e);
+        }
+    }
+
+    @Override
     public List<ChatMessage> getAllMessages() {
         try {
             return chatMessageDao.findAll();

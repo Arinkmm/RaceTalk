@@ -39,6 +39,19 @@ public class ChatMessageDaoImpl implements ChatMessageDao {
     }
 
     @Override
+    public void deleteById(int id) {
+        String sql = "DELETE FROM messages WHERE id = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error deleting message id {}", id, e);
+            throw new DataAccessException("Failed to delete message by id", e);
+        }
+    }
+
+    @Override
     public List<ChatMessage> findAll() {
         String sql = "SELECT * FROM messages ORDER BY created_at ASC";
         List<ChatMessage> chatMessages = new ArrayList<>();

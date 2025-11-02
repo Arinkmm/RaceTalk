@@ -30,6 +30,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>const contextPath = '${contextPath}';</script>
+<script>var isAdmin = ${isAdmin?string("true", "false")};</script>
 <script src="${contextPath}/assets/js/chat.js"></script>
 
 </body>
