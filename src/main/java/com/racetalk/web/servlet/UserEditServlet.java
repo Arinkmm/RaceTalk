@@ -44,6 +44,14 @@ public class UserEditServlet extends HttpServlet {
             String confirmPassword = req.getParameter("confirmPassword");
             String status = req.getParameter("status");
 
+            if (username != null) {
+                if (!userService.validateUsername(username)) {
+                    req.setAttribute("EditErrorMessage", "Имя занято");
+                    req.getRequestDispatcher("/templates/user_edit.ftl").forward(req, resp);
+                    return;
+                }
+            }
+
             if (newPassword != null && !newPassword.isEmpty()) {
                 if (!newPassword.equals(confirmPassword)) {
                     req.setAttribute("EditErrorMessage", "Пароли не совпадают");

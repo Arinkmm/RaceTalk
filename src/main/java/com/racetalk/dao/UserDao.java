@@ -12,8 +12,6 @@ public interface UserDao {
 
     void deleteById(int id);
 
-    void updateRole(int userId, UserRole role);
-
     Optional<User> findByUsername(String username);
 
     Optional<User> findById(int id);
