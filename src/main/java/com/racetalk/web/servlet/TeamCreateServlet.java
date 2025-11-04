@@ -37,23 +37,29 @@ public class TeamCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
+        try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+            req.getRequestDispatcher("/templates/team_create.ftl").forward(req, resp);
+        } catch (ServiceException e) {
+            logger.error("Failed to get creating team", e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            req.getRequestDispatcher("/error").forward(req, resp);
         }
-        req.getRequestDispatcher("/templates/team_create.ftl").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
         try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
             String name = req.getParameter("name");
             String country = req.getParameter("country");
 

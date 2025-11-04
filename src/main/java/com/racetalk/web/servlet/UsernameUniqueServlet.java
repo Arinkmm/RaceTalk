@@ -1,7 +1,10 @@
 package com.racetalk.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.racetalk.exception.ServiceException;
 import com.racetalk.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +14,9 @@ import java.util.Map;
 
 @WebServlet(name = "UsernameUnique", urlPatterns = "/validate/username-unique")
 public class UsernameUniqueServlet extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(UsernameUniqueServlet.class);
     private final ObjectMapper mapper = new ObjectMapper();
+
     private UserService userService;
 
     @Override
@@ -23,14 +28,19 @@ public class UsernameUniqueServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String username = req.getParameter("username");
-        boolean unique = userService.isUsernameUnique(username);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        try {
+            String username = req.getParameter("username");
+            boolean unique = userService.isUsernameUnique(username);
 
-        resp.setContentType("application/json;charset=UTF-8");
+            resp.setContentType("application/json;charset=UTF-8");
 
-        Map<String, Boolean> result = Map.of("unique", unique);
-        mapper.writeValue(resp.getWriter(), result);
+            Map<String, Boolean> result = Map.of("unique", unique);
+            mapper.writeValue(resp.getWriter(), result);
+        } catch (ServiceException e) {
+            logger.error("Failed to check username unique", e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            req.getRequestDispatcher("/error").forward(req, resp);
+        }
     }
-
 }

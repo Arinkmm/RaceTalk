@@ -43,26 +43,25 @@ public class TeamDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null) {
+            req.setAttribute("errorMessage", "ID команды не найдено");
+            req.setAttribute("statusCode", 400);
+            req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            return;
+        }
+
+        String teamIdStr = pathInfo.substring(1);
+        int teamId;
         try {
-            String pathInfo = req.getPathInfo();
-            if (pathInfo == null) {
-                req.setAttribute("errorMessage", "ID команды не найдено");
-                req.setAttribute("statusCode", 400);
-                req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
+            teamId = Integer.parseInt(teamIdStr);
+        } catch (NumberFormatException e) {
+            req.setAttribute("errorMessage", "Неверный формат ID команды");
+            req.setAttribute("statusCode", 400);req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
                 return;
             }
 
-            String teamIdStr = pathInfo.substring(1);
-            int teamId;
-            try {
-                teamId = Integer.parseInt(teamIdStr);
-            } catch (NumberFormatException e) {
-                req.setAttribute("errorMessage", "Неверный формат ID команды");
-                req.setAttribute("statusCode", 400);
-                req.getRequestDispatcher("/templates/error.ftl").forward(req, resp);
-                return;
-            }
-
+        try {
             Optional<Team> teamOptional = teamService.getById(teamId);
             if (teamOptional.isEmpty()) {
                 req.setAttribute("errorMessage", "Команда не найдена");

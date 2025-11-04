@@ -43,13 +43,13 @@ public class DriverCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
         try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
             List<Team> teams = teamService.getAllTeams();
             req.setAttribute("teams", teams);
             req.getRequestDispatcher("/templates/driver_create.ftl").forward(req, resp);
@@ -62,13 +62,13 @@ public class DriverCreateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
         try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
             int driverNumber = Integer.parseInt(req.getParameter("driverNumber"));
             if (driverNumber < 1) {
                 req.setAttribute("DriverCreateErrorMessage", "Неверный формат номера гонщика");

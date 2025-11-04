@@ -32,26 +32,32 @@ public class RaceCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
+        try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+            req.getRequestDispatcher("/templates/race_create.ftl").forward(req, resp);
+        } catch (ServiceException e) {
+            logger.error("Failed to get creating race", e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            req.getRequestDispatcher("/error").forward(req, resp);
         }
-        req.getRequestDispatcher("/templates/race_create.ftl").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("user");
-        if (!userService.isAdmin(user)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
-        String location = req.getParameter("location");
-        String dateStr = req.getParameter("raceDate");
-
+    protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            User user = (User) req.getSession().getAttribute("user");
+            if (!userService.isAdmin(user)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
+            String location = req.getParameter("location");
+            String dateStr = req.getParameter("raceDate");
+
             LocalDate raceDate = LocalDate.parse(dateStr);
             Race race = new Race();
             race.setLocation(location);
