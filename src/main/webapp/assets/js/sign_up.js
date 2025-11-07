@@ -9,11 +9,6 @@ $(document).ready(function() {
 
     $('#username').on('input', function() {
         let username = $(this).val();
-        if (username.length < 3) {
-            $('#username-feedback').text('Имя пользователя должно быть не менее 3 символов').show();
-            updateSubmitButton();
-            return;
-        }
         $.getJSON(contextPath + '/validate/username', {username: username}, function(data) {
             if (!data.valid) {
                 $('#username-feedback').text('Имя пользователя должно содержать от 3 до 20 латинских букв или цифры от 0 до 9').show();
