@@ -113,19 +113,22 @@ CREATE TABLE upcoming_races (
 
 ### 3. Configure Environment Variables in IntelliJ IDEA
 
-**Step 1:** Go to **Run → Edit Configurations...**
+**Step 1:** Go to Run → Edit Configurations...
 
 **Step 2:** Select your Tomcat configuration (or create a new one)
 
-**Step 3:** In the **Environment variables** field, add:
+**Step 3:** In the Environment variables field, add:
 
 ```
 DATABASE_CONNECTION_URL=jdbc:postgresql://localhost:5432/racetalk_db;
 DATABASE_CONNECTION_USERNAME=postgres;
 DATABASE_CONNECTION_PASSWORD=<your_password>
+CLOUDINARY_CLOUD_NAME=<your_cloud_name>
+CLOUDINARY_API_KEY=<your_api_key>
+CLOUDINARY_API_SECRET=<your_api_secret>
 ```
 
-Replace `<your_password>` with your actual PostgreSQL password.
+Replace <your_password>, <your_cloud_name>, <your_api_key>, and <your_api_secret> with your actual credentials.
 
 **Step 4:** Click **OK** and save the configuration.
 
