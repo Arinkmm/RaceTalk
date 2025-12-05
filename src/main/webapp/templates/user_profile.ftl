@@ -31,10 +31,10 @@
 
             <p class="username">${user.username}</p>
             <p class="status text-muted fst-italic mb-3">${user.status!''}</p>
-            <#if canEdit>
+            <#if isOwner>
                 <a href="${contextPath}/user/edit" class="btn btn-main mt-2">Редактировать</a>
             </#if>
-            <#if canDelete>
+            <#if isOwner>
                 <form method="post" action="${contextPath}/user/delete">
                     <button type="submit" class="btn btn-main mt-2">Удалить профиль</button>
                 </form>

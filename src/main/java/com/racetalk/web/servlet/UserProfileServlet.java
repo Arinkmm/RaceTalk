@@ -57,12 +57,8 @@ public class UserProfileServlet extends HttpServlet {
 
             User loggedUser = (User) req.getSession().getAttribute("user");
             boolean isOwner = loggedUser.getId() == user.getId();
-            boolean canDelete = userService.isAdmin(loggedUser) || isOwner;
-            boolean canEdit = isOwner;
 
             req.setAttribute("isOwner", isOwner);
-            req.setAttribute("canDelete", canDelete);
-            req.setAttribute("canEdit", canEdit);
 
             req.getRequestDispatcher("/templates/user_profile.ftl").forward(req, resp);
         } catch (ServiceException e) {
