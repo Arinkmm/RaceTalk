@@ -33,7 +33,7 @@
                             <#if team.photo??>
                                 <img src="${team.photo}" class="team-logo"/>
                             <#else>
-                                <img src="${contextPath}/assets/images/team-logo/default.jpg" class="team-logo"/>
+                                <img src="${contextPath}/assets/images/team-default.png" class="team-logo"/>
                             </#if>
                             <div class="team-name">${team.name}</div>
                             <div class="team-country">${team.country!""}</div>

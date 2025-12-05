@@ -27,7 +27,7 @@
                 <#if team.photo??>
                     <img src="${team.photo}" />
                 <#else>
-                    <img src="${contextPath}/assets/images/team-logo/default.jpg" />
+                    <img src="${contextPath}/assets/images/team-default.png" />
                 </#if>
             </div>
             <div class="hero-content">
@@ -65,7 +65,7 @@
                             <#if driver.photo??>
                                 <img src="${driver.photo}" class="photo" />
                             <#else>
-                                <img src="${contextPath}/assets/images/driver-profile/default.jpg" class="photo"/>
+                                <img src="${contextPath}/assets/images/driver-default.jpg" class="photo"/>
                             </#if>
                             ${driver.firstName} ${driver.lastName}
                         </td>

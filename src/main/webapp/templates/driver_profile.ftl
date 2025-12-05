@@ -27,7 +27,7 @@
         <#if driver.photo??>
             <img src="${driver.photo}" class="photo"/>
         <#else>
-            <img src="${contextPath}/assets/images/driver-profile/default.jpg" class="photo"/>
+            <img src="${contextPath}/assets/images/driver-default.png" class="photo"/>
         </#if>
         <div class="hero-content">
             <h1 class="hero-title">
