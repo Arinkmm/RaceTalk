@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -89,23 +90,35 @@ public class RaceImportServiceImpl implements RaceImportService {
         }
     }
 
-    private String sendGetRequest(String url) {
-        try {
-            URL getUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
-            connection.setRequestMethod("GET");
+    private String sendGetRequest(String url) throws InterruptedException {
+        int maxRetries = 3;
 
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    response.append(line);
+        for (int attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                URL getUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(20000);
+                connection.setReadTimeout(45000);
+
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        response.append(line);
+                    }
+                    return response.toString();
                 }
-                return response.toString();
+            } catch (SocketTimeoutException e) {
+                if (attempt < maxRetries - 1) {
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                logger.error("Unexpected error for URL: {}", url, e);
+                throw new ServiceException("Unexpected error", e);
             }
-        } catch (Exception e) {
-            logger.error("Error sending GET request to URL: {}", url, e);
-            throw new ServiceException("Failed to send GET request to external API", e);
         }
+        logger.error("Failed after {} retries for URL: {}", maxRetries, url);
+        throw new ServiceException("Failed to send GET request to " + url + " after retries");
     }
 }
