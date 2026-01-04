@@ -80,7 +80,7 @@ public class RaceDaoImpl implements RaceDao {
 
     @Override
     public void deleteUpcomingRacesByDate(LocalDate date) {
-        String sql = "DELETE FROM upcoming_races WHERE race_date = ?";
+        String sql = "DELETE FROM upcoming_races WHERE race_date <= ?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDate(1, Date.valueOf(date));
