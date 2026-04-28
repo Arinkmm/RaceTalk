@@ -1,46 +1,46 @@
-# RaceTalk — Formula 1 Fan Community Website
+# RaceTalk — Фан-сайт сообщества Formula 1
 
-A simple web application for Formula 1 funs built with **Java Servlets**, **FreeMarker templates**, and **PostgreSQL**.
+Простое веб-приложение для фанатов Формулы 1, созданное на базе **Java Servlets**, **шаблонов FreeMarker** и **PostgreSQL**.
 
-## Features
+## Возможности
 
-- **User Authentication** — Secure registration and login with BCrypt password hashing
-- **Session Management** — Role-based access control and authorization
-- **User Profiles** — View and edit user profiles with updated personal data function
-- **F1 Content** — Browse teams, drivers, and race results
-- **Personal Notes** — Create, read, update, and delete your notes
-- **Real-time Chat** — AJAX-powered chat with instant message delivery
-- **Responsive Design** — Bootstrap 5 for user-friendly interface
-- **Database Security** — JDBC with prepared statements to prevent SQL injection
-- **Client-side Validation** — AJAX validation for username uniqueness and password strength on registration
-- **Error Handling** — Custom error pages and exception handling
+- **Аутентификация пользователей** — Безопасная регистрация и вход с хешированием паролей через BCrypt
+- **Управление сессиями** — Разграничение доступа и авторизация на основе ролей
+- **Профили пользователей** — Просмотр и редактирование профиля с обновлением личных данных
+- **Контент о Формуле 1** — Просмотр команд, гонщиков и результатов гонок
+- **Личные заметки** — Создание, просмотр, редактирование и удаление заметок
+- **Чат в реальном времени** — Чат на базе AJAX с мгновенной доставкой сообщений
+- **Адаптивный дизайн** — Bootstrap 5 для удобного интерфейса
+- **Безопасность базы данных** — JDBC с подготовленными запросами для защиты от SQL-инъекций
+- **Валидация на стороне клиента** — AJAX-проверка уникальности имени пользователя и надёжности пароля при регистрации
+- **Обработка ошибок** — Кастомные страницы ошибок и обработка исключений
 
-## Requirements
+## Требования
 
 - Java 17+
 - Apache Tomcat 10+
 - PostgreSQL 13+
 - Maven 3.8+
-- IntelliJ IDEA 2023+ (recommended)
+- IntelliJ IDEA 2023+ (рекомендуется)
 
-## Project Architecture
+## Архитектура проекта
 
-### Package Structure
+### Структура пакетов
 ```
 src/main/java/com/racetalk/
-├── dao/ # Data Access Objects
-├── service/ # Business logic
-├── dto/ # Data Transfer Objects
-├── entity/ # Domain entities (User, Team, Driver...)
-├── exception/ # Custom exceptions
-├── util/ # Utilities (DB, Cloudinary, BCrypt...)
+├── dao/        # Объекты доступа к данным
+├── service/    # Бизнес-логика
+├── dto/        # Объекты передачи данных
+├── entity/     # Доменные сущности (User, Team, Driver...)
+├── exception/  # Кастомные исключения
+├── util/       # Утилиты (DB, Cloudinary, BCrypt...)
 ├── web/
-│   ├── servlet/ # Controllers (RaceServlet, ChatServlet...)
-│   ├── filter/ # AuthenticationFilter
+│   ├── servlet/  # Контроллеры (RaceServlet, ChatServlet...)
+│   ├── filter/   # AuthenticationFilter
 └── └── listener/ # InitListener
 ```
 
-## Templates & Assets
+## Шаблоны и ресурсы
 
 ```
 web-app/
@@ -48,37 +48,37 @@ web-app/
 ├── assets/
 │   ├── css/
 │   ├── js/
-└── └── images/ # team-logos, drivers, icons
+└── └── images/  # логотипы команд, гонщики, иконки
 ```
 
-## Setup Instructions
+## Инструкция по установке
 
-### 1. Clone the Repository
+### 1. Клонирование репозитория
 
-In IntelliJ IDEA:
+В IntelliJ IDEA:
 
-1. Open IntelliJ IDEA
-2. On the Welcome screen, click the button **Clone Repository**
-3. In the popup window:
-   - **URL:** Paste `https://github.com/Arinkmm/RaceTalk.git`
-   - **Directory:** Choose where to save (or keep default)
-4. Click **Clone**
-5. Wait for download to complete
-6. When IntelliJ asks "Would you like to open the cloned repository?", click **Yes**
+1. Откройте IntelliJ IDEA
+2. На экране приветствия нажмите кнопку **Clone Repository**
+3. В появившемся окне:
+   - **URL:** Вставьте `https://github.com/Arinkmm/RaceTalk.git`
+   - **Directory:** Выберите папку для сохранения (или оставьте по умолчанию)
+4. Нажмите **Clone**
+5. Дождитесь завершения загрузки
+6. Когда IntelliJ спросит «Would you like to open the cloned repository?», нажмите **Yes**
 
-The project will open automatically.
+Проект откроется автоматически.
 
-### 2. Create PostgreSQL Database
+### 2. Создание базы данных PostgreSQL
 
-Use pgAdmin:
+Через pgAdmin:
 
-1. Open pgAdmin 4 (web interface for PostgreSQL)
-2. Right-click **Databases** → **Create** → **Database**
-3. Enter name: `racetalk_db`
-4. Click **Save**
-5. Open **Query Tool** (SQL editor)
+1. Откройте pgAdmin 4 (веб-интерфейс для PostgreSQL)
+2. Правой кнопкой мыши нажмите на **Databases** → **Create** → **Database**
+3. Введите имя: `racetalk_db`
+4. Нажмите **Save**
+5. Откройте **Query Tool** (редактор SQL)
 
-Then run:
+Затем выполните:
 
 ```sql
 CREATE TABLE users (
@@ -147,107 +147,107 @@ CREATE TABLE upcoming_races (
 );
 ```
 
-### 3. Configure Environment Variables in IntelliJ IDEA
+### 3. Настройка переменных окружения в IntelliJ IDEA
 
-**Step 1:** Go to Run → Edit Configurations...
+**Шаг 1:** Перейдите в Run → Edit Configurations...
 
-**Step 2:** Select your Tomcat configuration (or create a new one)
+**Шаг 2:** Выберите вашу конфигурацию Tomcat (или создайте новую)
 
-**Step 3:** In the Environment variables field, add:
+**Шаг 3:** В поле Environment variables добавьте:
 
 ```
 DATABASE_CONNECTION_URL=jdbc:postgresql://localhost:5432/racetalk_db;
 DATABASE_CONNECTION_USERNAME=postgres;
-DATABASE_CONNECTION_PASSWORD=<your_password>
-CLOUDINARY_CLOUD_NAME=<your_cloud_name>
-CLOUDINARY_API_KEY=<your_api_key>
-CLOUDINARY_API_SECRET=<your_api_secret>
+DATABASE_CONNECTION_PASSWORD=<ваш_пароль>
+CLOUDINARY_CLOUD_NAME=<ваше_cloud_name>
+CLOUDINARY_API_KEY=<ваш_api_key>
+CLOUDINARY_API_SECRET=<ваш_api_secret>
 ```
 
-Replace <your_password>, <your_cloud_name>, <your_api_key>, and <your_api_secret> with your actual credentials.
+Замените `<ваш_пароль>`, `<ваше_cloud_name>`, `<ваш_api_key>` и `<ваш_api_secret>` на реальные значения.
 
-**Step 4:** Click **OK** and save the configuration.
+**Шаг 4:** Нажмите **OK** и сохраните конфигурацию.
 
-### 4. Build the Project
+### 4. Сборка проекта
 
-1. On the right side of the screen, find the **Maven** panel
-2. Expand: **RaceTalk** → **Lifecycle**
-3. Double-click on **clean**
-4. After it finishes, double-click on **package**
-5. Build logs will appear in the bottom panel
+1. В правой части экрана откройте панель **Maven**
+2. Разверните: **RaceTalk** → **Lifecycle**
+3. Дважды щёлкните по **clean**
+4. После завершения дважды щёлкните по **package**
+5. Логи сборки появятся в нижней панели
 
-This creates a `.war` file in the `target/` folder.
+В результате в папке `target/` будет создан файл `.war`.
 
-### 5. Run on Tomcat
+### 5. Запуск на Tomcat
 
-1. Go to **Run → Run 'Tomcat Server'**
-2. The application will start and open in your default browser.
+1. Перейдите в **Run → Run 'Tomcat Server'**
+2. Приложение запустится и откроется в браузере по умолчанию.
 
-## Key Components
+## Ключевые компоненты
 
-### Servlets
-- `RaceServlet` — Handles race data display
-- `DriverServlet` — Manages driver listings
-- `TeamServlet` — Displays teams
-- `NotesServlet` — CRUD operations for notes
-- `ChatServlet` — Real-time chat functionality
-- `LoginServlet` — User authentication
-- `SignUpServlet` — User registration
+### Сервлеты
+- `RaceServlet` — Отображение данных о гонках
+- `DriverServlet` — Управление списком гонщиков
+- `TeamServlet` — Отображение команд
+- `NotesServlet` — CRUD-операции для заметок
+- `ChatServlet` — Функциональность чата в реальном времени
+- `LoginServlet` — Аутентификация пользователей
+- `SignUpServlet` — Регистрация пользователей
 
-### Filters
-- `AuthenticationFilter` — Validates user session before accessing protected pages
+### Фильтры
+- `AuthenticationFilter` — Проверка сессии пользователя перед доступом к защищённым страницам
 
-### Listeners
-- `InitListener` — Initializes services on application startup
+### Слушатели
+- `InitListener` — Инициализация сервисов при запуске приложения
 
-### Templates
-- All pages use FreeMarker for dynamic content rendering
-- Consistent styling with Base CSS + page-specific CSS files
+### Шаблоны
+- Все страницы используют FreeMarker для рендеринга динамического контента
+- Единое оформление: базовый CSS + CSS-файлы для отдельных страниц
 
-## Main Screenshots
+## Скриншоты
 
-### Index Page
+### Главная страница
 
-![Index Page](images/index.png)
+![Главная страница](images/index.png)
 
-### Sign Up Page
+### Страница регистрации
 
-![Sign Up Page](images/sign_up.png)
+![Страница регистрации](images/sign_up.png)
 
-### Main Page
+### Основная страница
 
-![Main Page](images/main.png)
+![Основная страница](images/main.png)
 
-### Page with drivers
+### Страница гонщиков
 
-![Page with drivers](images/drivers.png)
+![Страница гонщиков](images/drivers.png)
 
-### Page with teams
+### Страница команд
 
-![Page with teams](images/teams.png)
+![Страница команд](images/teams.png)
 
-### Page with past races
+### Страница прошедших гонок
 
-![Page with past races](images/races.png)
+![Страница прошедших гонок](images/races.png)
 
-### Page with results
+### Страница результатов
 
-![Page with results](images/results.png)
+![Страница результатов](images/results.png)
 
-### Page with user's notes
+### Страница заметок пользователя
 
-![Notes Page](images/notes.png)
+![Страница заметок](images/notes.png)
 
-### Chat
+### Чат
 
-![Chat](images/chat.png)
+![Чат](images/chat.png)
 
-### User's Profile
+### Профиль пользователя
 
-![Profile](images/profile.png)
+![Профиль](images/profile.png)
 
-## Support & Contact
+## Поддержка и контакты
 
-Got questions? Need help with setup? Found a bug?
+Остались вопросы? Нужна помощь с настройкой? Нашли баг?
 
 Email: **mairabeeva42@gmail.com**
