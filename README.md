@@ -250,4 +250,4 @@ CLOUDINARY_API_SECRET=<ваш_api_secret>
 
 Остались вопросы? Нужна помощь с настройкой? Нашли баг?
 
-Email: **mairabeeva42@gmail.com**
+Email: **mairabeeva42@gmail.com** | Telegram: @arinkmm
